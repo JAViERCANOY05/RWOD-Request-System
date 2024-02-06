@@ -4,7 +4,9 @@ const Dashboard = () => {
   return (
     <div className=" flex justify-center my-20 ">
       <div className="">
-        <p className=" border-2 p-5 rounded-md font-bold ">Dashboard</p>
+        <p className=" border-2 p-5 rounded-md font-bold bg-slate-400 text-white ">
+          Dashboard
+        </p>
 
         <div className=" flex gap-10 my-10">
           <div className="box-content h-32 w-96 p-4  border-4 rounded-md">

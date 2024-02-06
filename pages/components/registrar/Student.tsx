@@ -114,7 +114,7 @@ export default function StickyHeadTable() {
   return (
     <div className=" h-screen">
       <div className="my-10">
-        <p className=" font-bold border-2 rounded-md p-5">
+        <p className=" font-bold border-2 rounded-md p-5 bg-slate-400 text-white">
           Student Information
         </p>
       </div>
