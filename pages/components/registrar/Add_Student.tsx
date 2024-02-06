@@ -227,8 +227,8 @@ export default function MiniDrawer() {
             Add Student
           </p>
         </div>
-
-        <div className=" flex justify-center ">
+        <div className=" text-center my-20">on Going input field !</div>
+        {/* <div className=" flex justify-center ">
           <div className=" border-2 px-60 my-60 py-10  rounded-md bg-slate-400 ">
             <p className=" my-5 mx-5 font-bold">Course Info</p>
             <form onSubmit={handleSubmit}>
@@ -282,7 +282,7 @@ export default function MiniDrawer() {
               </div>
             </form>
           </div>
-        </div>
+        </div> */}
       </Box>
     </Box>
   );
