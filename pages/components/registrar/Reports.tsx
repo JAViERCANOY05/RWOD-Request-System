@@ -1,26 +1,18 @@
 import * as React from "react";
-import { BarChart } from "@mui/x-charts/BarChart";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 
-export default function ChartsOverviewDemo() {
-  return (
-    <div>
-      <p className=" font-bold border-2 rounded-md p-5 my-10 text-black border-black">
-        Reports
-      </p>
+const data = [
+  { value: 5, label: "A" },
+  { value: 10, label: "B" },
+  { value: 15, label: "C" },
+  { value: 20, label: "D" },
+];
 
-      <BarChart
-        series={[
-          { data: [35, 44, 24, 34] },
-          { data: [51, 6, 49, 30] },
-          { data: [15, 25, 30, 50] },
-          { data: [60, 50, 15, 25] },
-          { data: [60, 50, 15, 25] },
-          { data: [60, 50, 15, 100] },
-        ]}
-        height={290}
-        xAxis={[{ data: ["Q1", "Q2", "Q3", "Q4"], scaleType: "band" }]}
-        margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-      />
-    </div>
-  );
+const size = {
+  width: 400,
+  height: 200,
+};
+
+export default function PieArcLabel() {
+  return <div>On Going</div>;
 }

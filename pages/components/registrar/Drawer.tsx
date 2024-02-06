@@ -52,9 +52,9 @@ const component: display[] = [
     href: "Student",
   },
   {
-    name: "List All Request",
+    name: "All Request",
     icon: <InboxIcon />,
-    href: "List All Request",
+    href: "All Request",
   },
   {
     name: "Users",
@@ -158,7 +158,7 @@ export default function MiniDrawer() {
       setDisplayComponent(<Courses />);
     } else if (item === "Student") {
       setDisplayComponent(<Student />);
-    } else if (item === "List All Request") {
+    } else if (item === "All Request") {
       setDisplayComponent(<List_of_Request />);
     } else if (item === "Users") {
       setDisplayComponent(<Users />);
@@ -184,9 +184,14 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Registrar Web-based Online Document Request System
-          </Typography>
+          <div className=" flex justify-between">
+            <Typography variant="h6" noWrap component="div">
+              Registrar Web-based Online Document Request System
+            </Typography>
+            {/* <Typography variant="h6" noWrap component="div">
+              Registrar Web-based Online Document Request System
+            </Typography> */}
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -244,22 +249,6 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {displayComponent}
-
-        {/* <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography> */}
       </Box>
     </Box>
   );

@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Link from "next/link";
 
 interface Column {
-  id: "name" | "description" | "action" ;
+  id: "name" | "description" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -72,7 +72,10 @@ export default function StickyHeadTable() {
   return (
     <div className=" h-screen">
       <div className="my-10">
-        <p className=" font-bold border-2 rounded-md p-5"> Courses</p>
+        <p className=" font-bold border-2 rounded-md p-5 bg-slate-400 text-white">
+          {" "}
+          Courses
+        </p>
       </div>
       <Link href="/components/registrar/Add_Course">
         <button
