@@ -3,9 +3,14 @@ import Link from "next/link";
 // import Button from "@mui/material/Button";
 // import PersonIcon from "@mui/icons-material/Person";
 import * as React from "react";
+import Image from "next/image";
+import Logo from "../public/bisu-logo.png";
+import { useRouter } from "next/navigation"; // Correct import
 
 // import DiamondIcon from "@mui/icons-material/Diamond";
 const Home = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
@@ -21,8 +26,12 @@ const Home = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log("Submitted credentials:", formData);
-    // Add logic for further processing, like sending the credentials to a server
+    console.log("Submitted credentials:", formData.email);
+    if (formData.email === "student@gmail.com") {
+      router.push("/components/registrar/Student_Drawer");
+    } else if (formData.email === "registrar@gmail.com") {
+      router.push("/components/registrar/Drawer");
+    }
   };
   return (
     <div className=" h-screen bg-blue-400     ">
@@ -36,11 +45,10 @@ const Home = () => {
           <div className="   px-10 rounded-md py-10">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
               <div className="mx-auto flex  justify-center text-white h-10 w-auto">
-                <p>Logo Here</p>
-                {/* <DiamondIcon /> */}
+                <Image src={Logo} width={90} height={90} alt="Bisu Logo" />
               </div>
               <h2 className="my-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-                Registrar Login
+                Login
               </h2>
             </div>
             <form
@@ -102,14 +110,14 @@ const Home = () => {
               </div>
 
               <div>
-                <Link href="/components/registrar/Drawer">
-                  <button
-                    type="submit"
-                    className="flex w-full justify-center rounded-md bg-[#FF892E] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    Log in
-                  </button>
-                </Link>
+                {/* <Link href="/components/registrar/Drawer"> */}
+                <button
+                  type="submit"
+                  className="flex w-full justify-center rounded-md bg-[#FF892E] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Log in
+                </button>
+                {/* </Link> */}
               </div>
             </form>
 
