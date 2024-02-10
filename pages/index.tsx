@@ -31,6 +31,8 @@ const Home = () => {
       router.push("/components/registrar/Student_Drawer");
     } else if (formData.email === "registrar@gmail.com") {
       router.push("/components/registrar/Drawer");
+    } else if (formData.email === "cashier@gmail.com") {
+      router.push("/components/cashier");
     }
   };
   return (
