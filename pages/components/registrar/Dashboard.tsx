@@ -9,7 +9,7 @@ const Dashboard = () => {
         </p>
 
         <div className=" flex gap-10 my-10">
-          <div className="box-content h-32 w-96 p-4  border-4 rounded-md">
+          <div className="box-content h-32 w-96 p-4  border-4 rounded-md border-blue-600">
             <p>Number of total request</p>
             <p className="pt-5">2</p>
 
@@ -22,7 +22,7 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
-          <div className="box-content h-32 w-96  p-4 border-4 ... rounded-md">
+          <div className="box-content h-32 w-96  p-4 border-4 ... rounded-md border-blue-600">
             <p>Waiting for Approval</p>
             <p className="pt-5">2</p>
 
@@ -37,7 +37,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className=" flex gap-10 my-10">
-          <div className="box-content h-32 w-96  p-4 border-4 ... rounded-md">
+          <div className="box-content h-32 w-96  p-4 border-4 ... rounded-md border-blue-600">
             <p>Releasing</p>
             <p className="pt-5">2</p>
 
@@ -50,7 +50,7 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
-          <div className="box-content h-32 w-96  p-4 border-4 ... rounded-md">
+          <div className="box-content h-32 w-96  p-4 border-4 ... rounded-md border-green-600">
             <p>Completed</p>
             <p className="pt-5">2</p>
             <div className=" flex justify-center mt-5">
