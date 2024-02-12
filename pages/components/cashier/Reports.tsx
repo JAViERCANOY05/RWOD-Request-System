@@ -15,12 +15,16 @@ const Reports = () => {
             flexWrap: "wrap",
             "& > :not(style)": {
               m: 1,
-              width: 1600,
+              width: 1800,
               height: 700,
             },
           }}
         >
-          <Paper elevation={3} />
+          <Paper elevation={3}>
+            <div className=" m-5">
+              <p>Report :</p>
+            </div>
+          </Paper>
         </Box>
       </div>
     </div>
