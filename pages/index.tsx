@@ -1,13 +1,12 @@
-import Link from "next/link";
-// import Stack from "@mui/material/Stack";
-// import Button from "@mui/material/Button";
-// import PersonIcon from "@mui/icons-material/Person";
 import * as React from "react";
 import Image from "next/image";
 import Logo from "../public/bisu-logo.png";
 import { useRouter } from "next/navigation"; // Correct import
+import LoginAPI from "./api/login_api";
+import { notifyError } from "./Notifications";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// import DiamondIcon from "@mui/icons-material/Diamond";
 const Home = () => {
   const router = useRouter();
 
@@ -24,15 +23,31 @@ const Home = () => {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("Submitted credentials:", formData.email);
-    if (formData.email === "student@gmail.com") {
-      router.push("/components/registrar/Student_Drawer");
-    } else if (formData.email === "registrar@gmail.com") {
-      router.push("/components/registrar/Drawer");
-    } else if (formData.email === "cashier@gmail.com") {
-      router.push("/components/cashier");
+    const userAccount = {
+      email: formData.email,
+      password: formData.password,
+    };
+    console.log("Submitted credentials:", userAccount);
+
+    try {
+      const response = await LoginAPI.logIn(formData);
+      console.log("response", response.existUser.role);
+      if (response.existUser.role === "registrar") {
+        router.push("/components/registrar/Drawer");
+        // localStorage.setItem("id", response.user._id);
+        console.log("role", response.existUser.role);
+      } else if (response.existUser.role === "cashier") {
+        router.push("/components/cashier");
+        console.log("role", response.existUser.role);
+      } else if (response.existUser.role === "student") {
+        console.log("role", response.existUser.role);
+        router.push("/components/registrar/Student_Drawer");
+      }
+    } catch (err: any) {
+      notifyError("Wrong credentials");
+      console.log("Wrong credentials");
     }
   };
   return (
@@ -72,7 +87,6 @@ const Home = () => {
                     onChange={handleChange}
                     id="email"
                     name="email"
-                    type="email"
                     autoComplete="email"
                     required
                     className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -134,6 +148,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

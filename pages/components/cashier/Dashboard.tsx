@@ -5,7 +5,7 @@ const Dashboard = () => {
     <div className=" h-screen mt-10 flex justify-center  ">
       <div className="">
         <p className=" border-2 p-5 rounded-md font-bold bg-slate-400 text-white ">
-          Dashboard
+          Cashier Dashboard
         </p>
 
         <div className=" flex gap-10 my-10">
