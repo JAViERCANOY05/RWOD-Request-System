@@ -15,7 +15,11 @@ const RequestForm = {
       );
       if (response.ok) {
         const responseData = await response.json();
-        return responseData;
+        const sendTo = {
+          response: responseData,
+          status: true,
+        };
+        return sendTo;
       }
       throw new Error("Something went wrong ! ");
     } catch (error) {
