@@ -25,24 +25,30 @@ const Home = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
     const userAccount = {
       email: formData.email,
       password: formData.password,
     };
     console.log("Submitted credentials:", userAccount);
-
     try {
-      const response = await LoginAPI.logIn(formData);
-      console.log("response", response.existUser.role);
-      if (response.existUser.role === "registrar") {
+      const response = await LoginAPI.logIn(userAccount);
+      console.log("response", response.user.role);
+      if (response.user.role === "registrar") {
+        localStorage.setItem("token", response.token);
+
         router.push("/components/registrar/Drawer");
-        // localStorage.setItem("id", response.user._id);
-        console.log("role", response.existUser.role);
-      } else if (response.existUser.role === "cashier") {
+        console.log("role", response.user.role);
+      } else if (response.user.role === "cashier") {
+        localStorage.setItem("token", response.token);
+
         router.push("/components/cashier");
+
         console.log("role", response.existUser.role);
-      } else if (response.existUser.role === "student") {
-        console.log("role", response.existUser.role);
+      } else if (response.user.role === "student") {
+        localStorage.setItem("token", response.token);
+
+        console.log("role", response.user.role);
         router.push("/components/registrar/Student_Drawer");
       }
     } catch (err: any) {

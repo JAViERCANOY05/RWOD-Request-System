@@ -9,22 +9,26 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { notifyError, notifySuccess } from "@/pages/Notifications";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Link from "next/link";
+import { eventNames } from "process";
+import RequestForm from "@/pages/api/request_form";
 
 type Inputs = {
-  firtName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  fee: string;
-  gender: string;
-
-  exampleRequired: string;
+  controlNo: string;
+  studentID: string;
+  emailAddress: string;
+  areYouTheOwner: string;
+  documentName: string;
+  noCopies: string;
+  dateRequest: string;
+  relationshipToOwnwer: string;
 };
 const style = {
   position: "absolute" as "absolute",
@@ -224,49 +228,17 @@ const rows = [
     "2",
     "22"
   ),
-  createData(
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "2",
-    "2",
-    "22"
-  ),
-  createData(
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "2",
-    "2",
-    "22"
-  ),
 ];
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {
+    reset,
     register,
     handleSubmit,
     watch,
+
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -277,16 +249,38 @@ export default function StickyHeadTable() {
   };
   const handleClose = () => setOpen(false);
 
-  const onSubmit: SubmitHandler<Inputs> = (data: any) => {
-    const accountCreated = {
-      email: data.email,
-      password: data.password,
-      gender: data.gender,
-      firstName: data.firtName,
-      lastName: data.firtName,
-    };
+  const onSubmit: SubmitHandler<Inputs> = async (data: any, event: any) => {
+    console.log("data is here ", data);
+    event.preventDefault();
 
-    setOpen(true);
+    const dataRequest = {
+      controlNo: data.controlNo,
+      studentID: data.studentID,
+      emailAddress: data.emailAddress,
+      areYouTheOwner: data.areYouTheOwner,
+      documentName: data.documentName,
+      noCopies: data.noCopies,
+      dateRequest: data.dateRequest,
+      relationshipToOwnwer: data.relationshipToOwnwer,
+    };
+    const token = localStorage.getItem("token");
+
+    console.log(dataRequest, "data form request ! ", "token", token);
+
+    try {
+      const response = await RequestForm.request(dataRequest, token);
+      console.log(response, " hhehe");
+      if (response.message === "Add succesfully") {
+        notifySuccess(response.meesage);
+        reset();
+        setOpen(false);
+      } else {
+        console.log("error ");
+      }
+    } catch (error) {
+      notifyError("Something went wrong ! ");
+      console.log(error);
+    }
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -444,91 +438,106 @@ export default function StickyHeadTable() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form className=" bg-slate-400 rounded-md py-5">
-            {/* register your input into the hook by invoking the "register" function */}
-
-            {/* include validation with required or other standard HTML validation rules */}
-            <div className=" flex">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className=" bg-slate-400 rounded-md py-5"
+          >
+            <div className=" flex justify-center">
+              <p className=" my-5 px-10 p-3  rounded-3xl font-bold text-white bg-slate-500">
+                Fill out Information
+              </p>
+            </div>
+            <div className=" flex justify-center">
               <div>
-                <p className=" mx-2 mt-3 mb-1">First Name</p>
+                <p className=" mx-2 mt-3 mb-1">Control No.</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("firtName", { required: true })}
+                  {...register("controlNo", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.firtName && <span>This field is required</span>}
+                  {errors.controlNo && <span>This field is required</span>}
                 </div>
               </div>
               <div>
-                <p className=" mx-2 mt-3 mb-1">Last Name</p>
+                <p className=" mx-2 mt-3 mb-1">Student ID</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("lastName", { required: true })}
+                  {...register("studentID", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.lastName && <span>This field is required</span>}
+                  {errors.studentID && <span>This field is required</span>}
                 </div>
               </div>
             </div>
-            <div className=" flex">
+            <div className=" flex justify-center">
               <div>
-                <p className=" mx-2 mt-3 mb-1">Enter your email</p>
+                <p className=" mx-2 mt-3 mb-1">Email Address</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("email", { required: true })}
+                  {...register("emailAddress", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.email && <span>This field is required</span>}
+                  {errors.emailAddress && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Are you the owner</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("areYouTheOwner", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.areYouTheOwner && <span>This field is required</span>}
                 </div>
               </div>
             </div>
-            <div className=" flex">
+            <div className=" flex justify-center">
               <div>
-                <p className=" mx-2 mt-3 mb-1">Enter your password</p>
-                <input
-                  // name="password"
-                  className=" mx-2 rounded-md py-3 px-10"
-                  type="password"
-                  {...register("password", {
-                    required: "You must specify a password",
-                    minLength: {
-                      value: 8,
-                      message: "Password least 8 characters",
-                    },
-                  })}
-                />
-                <div className=" mx-2 text-yellow-500">
-                  {errors.password && <p>{errors.password.message}</p>}
-                </div>
-
-                {/* <div className=" mx-2 text-yellow-500">
-                {errors.password && <span>This field is required</span>}
-              </div> */}
-              </div>
-            </div>
-            <div className=" flex">
-              <div>
-                <p className=" mx-2 mt-3 mb-1">Registration fee</p>
+                <p className=" mx-2 mt-3 mb-1">Document Name</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("fee", { required: true })}
+                  {...register("documentName", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.fee && <span>This field is required</span>}
+                  {errors.documentName && <span>This field is required</span>}
                 </div>
               </div>
               <div>
-                <p className=" mx-2 mt-3 mb-1 ">Gender</p>
+                <p className=" mx-2 mt-3 mb-1">Relastionship to the owner</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("gender", { required: true })}
+                  {...register("relationshipToOwnwer", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.gender && <span>This field is required</span>}
+                  {errors.relationshipToOwnwer && (
+                    <span>This field is required</span>
+                  )}
                 </div>
               </div>
             </div>
-            <div className=" flex justify-end my-8 mx-2 gap-5">
+            <div className=" flex justify-center">
+              <div>
+                <p className=" mx-2 mt-3 mb-1">No. Copies</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("noCopies", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.noCopies && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1 ">Date Request</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("dateRequest", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.dateRequest && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+            <div className=" flex justify-center my-10 mx-2 gap-5">
               {/* <Link href="/"> */}
               <button
                 onClick={handleClose}
@@ -537,27 +546,14 @@ export default function StickyHeadTable() {
                 Back
               </button>
               {/* </Link> */}
-              <button
-                // onClick={handleOpen}
-                // onClick={handleSubmit(onSubmit)}
-                className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white"
-              >
+              <button className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white">
                 Continue
               </button>
-              {/* <input
-              className=" cursor-pointer hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white"
-              type="submit"
-            /> */}
             </div>
           </form>
-          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography> */}
         </Box>
       </Modal>
+      <ToastContainer />
     </div>
   );
 }
