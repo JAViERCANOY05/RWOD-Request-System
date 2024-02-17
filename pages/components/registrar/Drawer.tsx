@@ -33,6 +33,17 @@ import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 
+import Modal from "@mui/material/Modal";
+import { useRouter } from "next/navigation";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+};
+
 const drawerWidth = 240;
 
 interface display {
@@ -147,9 +158,20 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
+  const router = useRouter();
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [displayComponent, setDisplayComponent] = useState(<Dashboard />);
+
+  const LogOut = () => {
+    localStorage.clear();
+    router.push("/");
+  };
+
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -175,12 +197,6 @@ export default function MiniDrawer() {
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open1 = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -203,74 +219,6 @@ export default function MiniDrawer() {
             <Typography variant="h6" noWrap component="div">
               Registrar Web-based Online Document Request System
             </Typography>
-            <div className="  ml-96 ">
-              <div>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Tooltip title="Account settings">
-                    <IconButton
-                      onClick={handleClick}
-                      size="small"
-                      sx={{ ml: 2 }}
-                      aria-controls={open1 ? "account-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open1 ? "true" : undefined}
-                    >
-                      <Avatar sx={{ width: 32, height: 32 }}></Avatar>
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </div>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open1}
-                onClose={handleClose}
-                onClick={handleClose}
-                PaperProps={{
-                  elevation: 0,
-                  sx: {
-                    overflow: "visible",
-                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                    mt: 1.5,
-                    "& .MuiAvatar-root": {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    "&::before": {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: "background.paper",
-                      transform: "translateY(-50%) rotate(45deg)",
-                      zIndex: 0,
-                    },
-                  },
-                }}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
-                <MenuItem onClick={handleClose}>
-                  <Link href="/">
-                    <ListItemIcon>
-                      <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                  </Link>
-                </MenuItem>
-              </Menu>
-            </div>
           </div>
         </Toolbar>
       </AppBar>
@@ -325,11 +273,125 @@ export default function MiniDrawer() {
           ))}
         </List>
         <Divider />
+        <ListItem
+          key={0}
+          disablePadding
+          sx={{ display: "block" }}
+          className=" mt-5 "
+        >
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <button
+              className="  flex justify-center items-center  "
+              onClick={handleOpenModal}
+            >
+              <ListItemIcon
+                className={
+                  open ? "mx-0  text-[#03396C]" : "   hover:text-[#03396C]"
+                }
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 1 : 0,
+                  justifyContent: "center ",
+                }}
+              >
+                <Logout fontSize="small" className=" text-red-800" />
+              </ListItemIcon>
+              <ListItemText
+                className={open ? "mx-8 " : "mx-0"}
+                // primary={"Logout"}
+                sx={{ opacity: open ? 1 : 0 }}
+                style={{
+                  display: open ? "block" : "none ",
+                  fontWeight: "bold",
+                }}
+              >
+                Logout
+              </ListItemText>
+            </button>
+          </ListItemButton>
+        </ListItem>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {displayComponent}
       </Box>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="relative p-4 w-full max-w-md max-h-full">
+            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <button
+                onClick={handleCloseModal}
+                type="button"
+                className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="popup-modal"
+              >
+                <svg
+                  className="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+              </button>
+              <div className="p-4 md:p-5 text-center">
+                <svg
+                  className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                  Are you sure you want Logout ?
+                </h3>
+                <button
+                  onClick={LogOut}
+                  data-modal-hide="popup-modal"
+                  type="button"
+                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                >
+                  Yes, Im sure
+                </button>
+                <button
+                  onClick={handleCloseModal}
+                  data-modal-hide="popup-modal"
+                  type="button"
+                  className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                >
+                  No, cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </Box>
   );
 }
