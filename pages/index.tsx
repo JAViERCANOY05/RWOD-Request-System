@@ -36,14 +36,11 @@ const Home = () => {
       console.log("response", response.user.role);
       if (response.user.role === "registrar") {
         localStorage.setItem("token", response.token);
-
         router.push("/components/registrar/Drawer");
         console.log("role", response.user.role);
       } else if (response.user.role === "cashier") {
         localStorage.setItem("token", response.token);
-
         router.push("/components/cashier");
-
         console.log("role", response.existUser.role);
       } else if (response.user.role === "student") {
         localStorage.setItem("token", response.token);
