@@ -14,11 +14,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ListRequest from "@/pages/api/list_request";
 import { useEffect } from "react";
-
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import Link from "next/link";
 import { eventNames } from "process";
 import RequestForm from "@/pages/api/request_form";
 
@@ -366,7 +362,6 @@ export default function StickyHeadTable() {
               },
             }}
           >
-            {/* <Paper> */}
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
@@ -477,7 +472,6 @@ export default function StickyHeadTable() {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </Paper>
-            {/* </Paper> */}
           </Box>
         </div>
       </div>

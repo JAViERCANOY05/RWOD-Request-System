@@ -35,6 +35,15 @@ import Logout from "@mui/icons-material/Logout";
 
 import Modal from "@mui/material/Modal";
 import { useRouter } from "next/navigation";
+import { BiSolidDashboard } from "react-icons/bi";
+import { FaListCheck } from "react-icons/fa6";
+import { CgProfile } from "react-icons/cg";
+import { MdWorkHistory } from "react-icons/md";
+import { SiCoursera } from "react-icons/si";
+import { PiStudentBold } from "react-icons/pi";
+import { FaCodePullRequest } from "react-icons/fa6";
+import { FaUsers } from "react-icons/fa";
+import { TbReportSearch } from "react-icons/tb";
 
 const style = {
   position: "absolute" as "absolute",
@@ -55,33 +64,33 @@ interface display {
 const component: display[] = [
   {
     name: "Dashboard",
-    icon: <InboxIcon />,
+    icon: <BiSolidDashboard style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Dashboard",
   },
   {
     name: "Courses",
-    icon: <InboxIcon />,
+    icon: <SiCoursera style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Courses",
   },
 
   {
     name: "Student",
-    icon: <InboxIcon />,
+    icon: <PiStudentBold style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Student",
   },
   {
     name: "All Request",
-    icon: <InboxIcon />,
+    icon: <FaCodePullRequest style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "All Request",
   },
   {
     name: "Users",
-    icon: <InboxIcon />,
+    icon: <FaUsers style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Users",
   },
   {
     name: "Reports",
-    icon: <InboxIcon />,
+    icon: <TbReportSearch style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Reports",
   },
 

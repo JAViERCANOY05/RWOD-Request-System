@@ -64,8 +64,8 @@ const Home = () => {
         <div className=" mt-40 sm:mx-auto sm:w-full sm:max-w-sm  bg-blue-600 rounded-md ">
           <div className="   px-10 rounded-md py-10">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-              <div className="mx-auto flex  justify-center text-white h-10 w-auto">
-                <Image src={Logo} width={90} height={90} alt="Bisu Logo" />
+              <div className="mx-auto flex  justify-center text-white  w-auto">
+                <Image src={Logo} width={100} height={120} alt="Bisu Logo" />
               </div>
               <h2 className="my-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
                 Login
