@@ -302,7 +302,7 @@ export default function MiniDrawer() {
                   justifyContent: "center ",
                 }}
               >
-                <Logout fontSize="small" className=" text-red-800" />
+                <Logout fontSize="small" />
               </ListItemIcon>
               <ListItemText
                 className={open ? "mx-8 " : "mx-0"}

@@ -33,6 +33,16 @@ import User from "./User";
 import Reports from "./Reports";
 import Modal from "@mui/material/Modal";
 import { useRouter } from "next/navigation";
+import { BiSolidDashboard } from "react-icons/bi";
+import { FaListCheck } from "react-icons/fa6";
+import { CgProfile } from "react-icons/cg";
+import { MdWorkHistory } from "react-icons/md";
+import { SiCoursera } from "react-icons/si";
+import { PiStudentBold } from "react-icons/pi";
+import { FaCodePullRequest } from "react-icons/fa6";
+import { FaUsers } from "react-icons/fa";
+import { TbReportSearch } from "react-icons/tb";
+import { GiReceiveMoney } from "react-icons/gi";
 
 const style = {
   position: "absolute" as "absolute",
@@ -53,23 +63,23 @@ interface display {
 const component: display[] = [
   {
     name: "Dashboard",
-    icon: <InboxIcon />,
+    icon: <BiSolidDashboard style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Dashboard",
   },
   {
     name: "Payment_Information",
-    icon: <InboxIcon />,
+    icon: <GiReceiveMoney style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Payment_Information",
   },
 
   {
     name: "User",
-    icon: <InboxIcon />,
+    icon: <FaUsers style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "User",
   },
   {
     name: "Reports",
-    icon: <InboxIcon />,
+    icon: <TbReportSearch style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Reports",
   },
 
