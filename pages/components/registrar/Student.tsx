@@ -105,7 +105,7 @@ export default function StickyHeadTable() {
       const token = localStorage.getItem("token");
       const responseData = await DeleteUser.delete(id, token);
       if (responseData.status) {
-        notifySuccess("User deleted!");
+        notifySuccess("Student deleted!");
         GetStudentList();
         console.log("already deleted!");
       }
