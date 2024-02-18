@@ -12,7 +12,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { notifyError, notifySuccess } from "@/pages/Notifications";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ListRequest from "@/pages/api/list_request";
+import ListRequest from "@/pages/api/list_requestSelf";
 import { useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import { eventNames } from "process";
@@ -241,17 +241,6 @@ const rows = [
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
-  // const [listRequest, setListRequest] = React.useState({
-  //   controlNumber: "",
-  //   studentId: "",
-  //   emailAddress: "",
-  //   isOwner: "",
-  //   documentationType: "",
-  //   relationshipToOwner: "",
-  //   status: "",
-  //   noOfCopies: "",
-  //   updatedAt: "",
-  // });
   const [listRequest, setListRequest] = React.useState([]);
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -338,7 +327,7 @@ export default function StickyHeadTable() {
       <div className="my-10">
         <p className=" font-bold border-2 rounded-md p-5 bg-slate-400 text-white">
           Request Information
-        </p>
+        </p> 
       </div>
       <div>
         <div className=" flex justify-end mx-40">

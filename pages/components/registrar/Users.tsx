@@ -8,17 +8,14 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Link from "next/link";
+import Student from "@/pages/api/getStudent";
+import DeleteUser from "@/pages/api/deleteUser";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { notifyError, notifySuccess } from "@/pages/Notifications";
 
 interface Column {
-  id:
-    | "id number"
-    | "name"
-    | "course"
-    | "year"
-    | "contact"
-    | "email"
-    | "account"
-    | "action";
+  id: "id number" | "name" | "course" | "year" | "contact" | "email" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -53,12 +50,6 @@ const columns: readonly Column[] = [
     align: "right",
   },
   {
-    id: "account",
-    label: "Account",
-    minWidth: 170,
-    align: "right",
-  },
-  {
     id: "action",
     label: "Action",
     minWidth: 170,
@@ -73,7 +64,6 @@ interface Data {
   year: number;
   contact: number;
   email: string;
-  account: number;
 }
 
 function createData(
@@ -82,17 +72,18 @@ function createData(
   course: string,
   year: number,
   contact: number,
-  email: string,
-  account: number
+  email: string
 ): Data {
-  return { id_number, name, course, year, contact, email, account };
+  return { id_number, name, course, year, contact, email };
 }
 
-const rows = [createData(2, "IN", "javier", 2, 4, "2ko", 5)];
+const rows = [createData(2, "IN", "javier", 2, 4, "2ko")];
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [studentList, setStudentList] = React.useState([]);
+  const [userId, setUserId] = React.useState();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -104,18 +95,50 @@ export default function StickyHeadTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const handleDelete = () => {
-    console.log("delete");
-  };
+
   const handleUpdate = () => {
     console.log("update");
+    notifyError("Under Coding!");
+  };
+  const handleDeleteUser = async (id: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      const responseData = await DeleteUser.delete(id, token);
+      if (responseData.status) {
+        notifySuccess("User deleted!");
+        GetStudentList();
+        console.log("already deleted!");
+      }
+    } catch (error) {
+      notifyError("Something went Wrong!");
+      console.log("something went wrong!");
+    }
   };
 
+  const GetStudentList = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const responseData = await Student.listOfStudent(token);
+      if (responseData.status) {
+        setStudentList(responseData.response);
+        console.log(" data is here ");
+      } else {
+        console.log("some is wrong ! ");
+      }
+    } catch (error) {
+      console.log("some is wrong ! ");
+    }
+  };
+
+  React.useEffect(() => {
+    GetStudentList();
+  }, []);
+  console.log(studentList, "ppp");
   return (
     <div className=" h-screen">
       <div className="my-10">
         <p className=" font-bold border-2 rounded-md p-5 bg-slate-400 text-white">
-          Registrar
+          Users List
         </p>
       </div>
       <Link href="/components/registrar/Add_Student">
@@ -145,57 +168,51 @@ export default function StickyHeadTable() {
             </TableHead>
 
             <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={index + 1}
-                    >
-                      <TableCell key={index + 1}>{row.id_number}</TableCell>
-                      <TableCell key={index + 1}>{row.name}</TableCell>
-                      <TableCell key={index + 1} align="right">
-                        {row.course}
-                      </TableCell>
-                      <TableCell key={index + 1} align="right">
-                        {row.year}
-                      </TableCell>
-                      <TableCell key={index + 1} align="right">
-                        {row.contact}
-                      </TableCell>
-                      <TableCell key={index + 1} align="right">
-                        {row.email}
-                      </TableCell>
-                      <TableCell key={index + 1} align="right">
-                        {row.account}
-                      </TableCell>
-
-                      <TableCell key={index + 1} align="right">
-                        <div>
-                          <Link href="/components/registrar/Edit_Course">
+              {studentList.length === 0 ? (
+                <TableCell align="center" colSpan={7}>
+                  Loading...
+                </TableCell>
+              ) : (
+                studentList
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((list: any, index = 0) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={index++}
+                      >
+                        <TableCell>{list._id}</TableCell>
+                        <TableCell>{list.firstName}</TableCell>
+                        <TableCell align="right">{list.course}</TableCell>
+                        <TableCell align="right">{list.year}</TableCell>
+                        <TableCell align="right">contact onGoing</TableCell>
+                        <TableCell align="right">{list.email}</TableCell>
+                        <TableCell align="right">
+                          <div>
+                            {/* <Link href="/components/registrar/Edit_Course"> */}
                             <button
-                              // onClick={handleUpdate}
+                              onClick={handleUpdate}
                               type="button"
-                              className="focus:outline-none font-bold   text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                              className="focus:outline-none font-bold text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                             >
                               Update
                             </button>
-                          </Link>
-                          <button
-                            onClick={handleDelete}
-                            type="button"
-                            className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                            {/* </Link> */}
+                            <button
+                              onClick={() => handleDeleteUser(list._id)}
+                              type="button"
+                              className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -209,6 +226,7 @@ export default function StickyHeadTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <ToastContainer />
     </div>
   );
 }
