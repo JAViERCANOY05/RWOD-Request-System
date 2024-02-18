@@ -32,21 +32,13 @@ const columns: readonly Column[] = [
 interface Data {
   name: string;
   description: string;
-  action: number;
 }
 
-function createData(name: string, description: string, action: number): Data {
-  return { name, description, action };
+function createData(name: string, description: string): Data {
+  return { name, description };
 }
 
-const rows = [
-  createData("India", "IN", 1324171354),
-  createData("China", "CN", 1403500365),
-  createData("Italy", "IT", 60483973),
-  createData("United States", "US", 327167434),
-  createData("Australia", "AU", 25475400),
-  createData("Germany", "DE", 83019200),
-];
+const rows = [createData("India", "IN"), createData("China", "CN")];
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
@@ -105,19 +97,14 @@ export default function StickyHeadTable() {
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+                .map((row, index = 0) => {
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={index + 1}
-                    >
-                      <TableCell key={index + 1}>{row.name}</TableCell>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index++}>
+                      <TableCell>{row.name}</TableCell>
 
-                      <TableCell key={index + 1}>{row.description}</TableCell>
+                      <TableCell>{row.description}</TableCell>
 
-                      <TableCell key={index + 1} align="right">
+                      <TableCell align="right">
                         <div>
                           <Link href="/components/registrar/Edit_Course">
                             <button

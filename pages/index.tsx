@@ -1,13 +1,14 @@
 import * as React from "react";
 import Image from "next/image";
-import Logo from "../public/bisu-logo.png";
+import bg from "../styles/image/bg.jpg";
+import Bg from "../styles/image/bisu.png";
+import Logo from "../styles/image/download-removebg-preview.png";
 import { useRouter } from "next/navigation"; // Correct import
 import LoginAPI from "./api/login_api";
 import { notifyError } from "./Notifications";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const Home = () => {
+export default function Example() {
   const router = useRouter();
 
   const [formData, setFormData] = React.useState({
@@ -54,106 +55,77 @@ const Home = () => {
     }
   };
   return (
-    <div className=" h-screen bg-blue-400     ">
-      <div className=" h-screen   justify-center ">
-        <div className=" bg-blue-600 py-8">
-          <p className=" text-center text-white text-lg font-bold">
+    <div className="">
+      <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-blue-500 flex flex-col justify-center sm:py-12">
+        <div className=" flex justify-center mb-20 ">
+          <div className=" text-2xl text-white font-bold border-b-2 py-5">
             Registrar Web-based Online Document Request System
-          </p>
+          </div>
         </div>
-        <div className=" mt-40 sm:mx-auto sm:w-full sm:max-w-sm  bg-blue-600 rounded-md ">
-          <div className="   px-10 rounded-md py-10">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-              <div className="mx-auto flex  justify-center text-white  w-auto">
+        <div className="relative py-3 sm:max-w-xl sm:mx-auto">
+          <div className="absolute inset-0 bg-white shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+
+          <div className="relative px-4 py-10  shadow-lg bg-gradient-to-r from-cyan-400 to-sky-500 sm:rounded-3xl sm:p-20">
+            <div className="max-w-md mx-auto">
+              <div className=" flex justify-center">
                 <Image src={Logo} width={100} height={120} alt="Bisu Logo" />
               </div>
-              <h2 className="my-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-                Login
-              </h2>
-            </div>
-            <form
-              className="space-y-6 "
-              onSubmit={handleSubmit}
-              action="#"
-              method="POST"
-            >
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-white"
-                >
-                  Username
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={formData.email}
-                    onChange={handleChange}
-                    id="email"
-                    name="email"
-                    autoComplete="email"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium leading-6 text-white"
-                  >
-                    Password
-                  </label>
-                  {/* <div className="text-sm">
-                    <a
-                      href="#"
-                      className="font-semibold text-white hover:text-[#FF892E]"
+              <div className="divide-y divide-gray-200">
+                <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 "
                     >
-                      Forgot password?
-                    </a>
-                  </div> */}
-                </div>
-                <div className="mt-2">
-                  <input
-                    value={formData.password}
-                    onChange={handleChange}
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    className="block w-full font-bold px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+                      Username
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        value={formData.email}
+                        onChange={handleChange}
+                        id="email"
+                        name="email"
+                        autoComplete="email"
+                        required
+                        className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium leading-6 "
+                    >
+                      Password
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        value={formData.password}
+                        onChange={handleChange}
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      onClick={handleSubmit}
+                      className="btn btn-accent text-white px-5 py-2"
+                    >
+                      Log in
+                    </button>
+                  </div>
                 </div>
               </div>
-
-              <div>
-                {/* <Link href="/components/registrar/Drawer"> */}
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-[#FF892E] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Log in
-                </button>
-                {/* </Link> */}
-              </div>
-            </form>
-
-            <p className="mt-10 text-center text-sm text-gray-500">
-              <a
-                href="#"
-                className="font-semibold leading-6 text-white hover:text-black"
-              >
-                Dont have an Account ? Create Account
-              </a>
-            </p>
+            </div>
           </div>
         </div>
       </div>
       <ToastContainer />
     </div>
   );
-};
-
-export default Home;
+}

@@ -7,25 +7,31 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import GetAllRequest from "@/pages/api/getAllRequest";
 import Box from "@mui/material/Box";
-
+import { useEffect } from "react";
+import DeleteRequest from "@/pages/api/deleteRequest";
+import { notifyError, notifySuccess } from "@/pages/Notifications";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Column {
   id:
     | "Control Number"
     | "User ID No"
-    | "Name"
-    | "Course"
+    // | "Name"
+    // | "Course"
     | "Are you the Owner"
-    | "Relationship of Owner"
+    // | "Relationship of Owner"
     | "No of Copy"
-    | "Total Amount"
+    // | "Total Amount"
     | "Date Request"
-    | "Date Payment"
-    | "Reference"
-    | "Proof of Payment"
-    | "Date Releasing"
-    | "Processing Officer"
+    // | "Date Payment"
+    // | "Reference"
+    // | "Proof of Payment"
+    // | "Date Releasing"
+    | "Action"
+    // | "Processing Officer"
     | "Status";
   label: string;
   minWidth?: number;
@@ -36,81 +42,87 @@ interface Column {
 const columns: readonly Column[] = [
   { id: "Control Number", label: "Control Number", minWidth: 170 },
   { id: "User ID No", label: "User ID No", minWidth: 100 },
-  {
-    id: "Name",
-    label: "Name",
-    minWidth: 170,
-    align: "right",
-  },
-  {
-    id: "Course",
-    label: "Course",
-    minWidth: 170,
-    align: "right",
-  },
+  // {
+  //   id: "Name",
+  //   label: "Name",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
+  // {
+  //   id: "Course",
+  //   label: "Course",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
   {
     id: "Are you the Owner",
     label: "Are you the Owner",
     minWidth: 170,
     align: "right",
   },
-  {
-    id: "Relationship of Owner",
-    label: "Relationship of Owner",
-    minWidth: 170,
-    align: "right",
-  },
+  // {
+  //   id: "Relationship of Owner",
+  //   label: "Relationship of Owner",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
   {
     id: "No of Copy",
     label: "No of Copy",
     minWidth: 170,
     align: "right",
   },
-  {
-    id: "Total Amount",
-    label: "Total Amount",
-    minWidth: 170,
-    align: "right",
-  },
+  // {
+  //   id: "Total Amount",
+  //   label: "Total Amount",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
   {
     id: "Date Request",
     label: "Date Request",
     minWidth: 170,
     align: "right",
   },
-  {
-    id: "Date Payment",
-    label: "Date Payment",
-    minWidth: 170,
-    align: "right",
-  },
-  {
-    id: "Reference",
-    label: "Reference",
-    minWidth: 170,
-    align: "right",
-  },
-  {
-    id: "Proof of Payment",
-    label: "Proof of Payment",
-    minWidth: 170,
-    align: "right",
-  },
-  {
-    id: "Date Releasing",
-    label: "Date Releasing",
-    minWidth: 170,
-    align: "right",
-  },
-  {
-    id: "Processing Officer",
-    label: "Processing Officer",
-    minWidth: 170,
-    align: "right",
-  },
+  // {
+  //   id: "Date Payment",
+  //   label: "Date Payment",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
+  // {
+  //   id: "Reference",
+  //   label: "Reference",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
+  // {
+  //   id: "Proof of Payment",
+  //   label: "Proof of Payment",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
+  // {
+  //   id: "Date Releasing",
+  //   label: "Date Releasing",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
+  // {
+  //   id: "Processing Officer",
+  //   label: "Processing Officer",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
   {
     id: "Status",
     label: "Status",
+    minWidth: 170,
+    align: "right",
+  },
+  {
+    id: "Action",
+    label: "Action",
     minWidth: 170,
     align: "right",
   },
@@ -227,8 +239,7 @@ const rows = [
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
- 
-
+  const [listOfRequest, setListOfRequest] = React.useState([]);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -240,11 +251,45 @@ export default function StickyHeadTable() {
     setPage(0);
   };
 
+  const handleDeleteUser = async (id: any) => {
+    console.log(id, "hah");
+    try {
+      const token = localStorage.getItem("token");
+      const responseData = await DeleteRequest.delete(token, id);
+      if (responseData.status) {
+        getListOfRequest();
+        notifySuccess("Request deleted!");
+        console.log("already deleted!");
+      }
+    } catch (error) {
+      notifyError("Something went Wrong!");
+      console.log("something went wrong!");
+    }
+  };
+  const getListOfRequest = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const responseData = await GetAllRequest.getRequest(token);
+      console.log(responseData);
+      if (responseData.status) {
+        setListOfRequest(responseData.response);
+      } else {
+        console.log("something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getListOfRequest();
+  }, []);
+
   return (
     <div>
       <div className="my-10">
         <p className=" font-bold border-2 rounded-md p-5 bg-slate-400 text-white">
-          Payment Information
+          All Request
         </p>
       </div>
       <div className=" flex justify-center">
@@ -277,60 +322,65 @@ export default function StickyHeadTable() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      return (
+                  {listOfRequest.length === 0 ? (
+                    <TableCell align="center" colSpan={6}>
+                      Loading...
+                    </TableCell>
+                  ) : (
+                    listOfRequest
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((list: any, index) => (
                         <TableRow
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={row.Are_you_the_Owner}
+                          key={index}
                         >
-                          <TableCell>{row.Control_Number}</TableCell>
-                          <TableCell>{row.Course}</TableCell>
+                          <TableCell>{list.controlNumber}</TableCell>
+                          <TableCell>{list.ownerId}</TableCell>
+                          <TableCell align="right">{list.isOwner}</TableCell>
+                          <TableCell align="right">{list.noOfCopies}</TableCell>
                           <TableCell align="right">
-                            {row.Date_Payment}
+                            {new Date(list.createdAt).toLocaleString()}
+                          </TableCell>
+                          {/* <TableCell align="right">{list.status}</TableCell> */}
+                          <TableCell align="right">
+                            <p
+                              className={
+                                list.status === "complete"
+                                  ? "complete bg-green-500  text-center text-white rounded-lg"
+                                  : "pending bg-blue-700 text-center text-white rounded-lg"
+                              }
+                            >
+                              {list.status}
+                            </p>
                           </TableCell>
                           <TableCell align="right">
-                            {row.Date_Releasing}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.Date_Request}
+                            <div>
+                              {/* <Link href="/components/registrar/Edit_Course"> */}
+                              <button
+                                // onClick={handleUpdate}
+                                type="button"
+                                className="focus:outline-none font-bold text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                              >
+                                Update
+                              </button>
+                              {/* </Link> */}
+                              <button
+                                onClick={() => handleDeleteUser(list._id)}
+                                type="button"
+                                className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                              >
+                                Delete
+                              </button>
+                            </div>
                           </TableCell>
                         </TableRow>
-                      );
-                    })}
+                      ))
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -347,6 +397,7 @@ export default function StickyHeadTable() {
           {/* </Paper> */}
         </Box>
       </div>
+      <ToastContainer />
     </div>
   );
 }
