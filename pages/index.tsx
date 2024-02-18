@@ -1,7 +1,5 @@
 import * as React from "react";
 import Image from "next/image";
-import bg from "../styles/image/bg.jpg";
-import Bg from "../styles/image/bisu.png";
 import Logo from "../styles/image/download-removebg-preview.png";
 import { useRouter } from "next/navigation"; // Correct import
 import LoginAPI from "./api/login_api";

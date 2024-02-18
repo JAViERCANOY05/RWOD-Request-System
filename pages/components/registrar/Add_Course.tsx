@@ -19,13 +19,14 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import Dashboard from "./Dashboard";
-import List_of_Request from "./List_of_Request";
-import Reports from "./Reports";
-import Student from "./Student";
-import Users from "./Users";
-import Courses from "./Courses";
 import { useState } from "react";
 import Link from "next/link";
+import { useForm, SubmitHandler } from "react-hook-form"
+
+type Inputs = {
+  example: string
+  exampleRequired: string
+}
 
 const drawerWidth = 240;
 
@@ -119,6 +120,15 @@ export default function MiniDrawer() {
     email: "",
     password: "",
   });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>()
+  
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -139,7 +149,7 @@ export default function MiniDrawer() {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmitData = (e: any) => {
     e.preventDefault();
     console.log("Submitted credentials:", formData);
     // Add logic for further processing, like sending the credentials to a server
@@ -231,7 +241,7 @@ export default function MiniDrawer() {
         <div className=" flex justify-center ">
           <div className=" border-2 px-60 my-60 py-10  rounded-md bg-slate-400 ">
             <p className=" my-5 mx-5 font-bold">Course Info</p>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitData}>
               <div className=" flex">
                 <label
                   htmlFor="email"
