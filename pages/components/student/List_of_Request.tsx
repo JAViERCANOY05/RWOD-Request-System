@@ -18,16 +18,17 @@ import Modal from "@mui/material/Modal";
 import { eventNames } from "process";
 import RequestForm from "@/pages/api/request_form";
 import DeleteRequest from "@/pages/api/deleteRequest";
+import UpdateRequest from "@/pages/api/updaRequest";
 
 type Inputs = {
-  controlNo: string;
+  controlNumber: string;
   studentID: string;
   emailAddress: string;
   areYouTheOwner: string;
   documentName: string;
   noCopies: string;
   dateRequest: string;
-  relationshipToOwnwer: string;
+  // relationshipToOwnwer: string;
 };
 const style = {
   position: "absolute" as "absolute",
@@ -97,12 +98,12 @@ const columns: readonly Column[] = [
     minWidth: 170,
     align: "right",
   },
-  {
-    id: "Relationship of Owner",
-    label: "Relationship of Owner",
-    minWidth: 170,
-    align: "right",
-  },
+  // {
+  //   id: "Relationship of Owner",
+  //   label: "Relationship of Owner",
+  //   minWidth: 170,
+  //   align: "right",
+  // },
   // {
   //   id: "Total Amount",
   //   label: "Total Amount",
@@ -184,65 +185,18 @@ interface Data {
   Status: string;
 }
 
-function createData(
-  Control_Number: string,
-  User_ID_No: string,
-  Name: string,
-  Course: string,
-  Are_you_the_Owner: string,
-  Relationship_of_Owner: string,
-  No_of_Copy: string,
-  Total_Amount: string,
-  Date_Request: string,
-  Date_Payment: string,
-  Reference: string,
-  Proof_of_Payment: string,
-  Date_Releasing: string,
-  Processing_Officer: string,
-  Status: string
-): Data {
-  return {
-    Control_Number,
-    User_ID_No,
-    Name,
-    Course,
-    Are_you_the_Owner,
-    Relationship_of_Owner,
-    No_of_Copy,
-    Total_Amount,
-    Date_Request,
-    Date_Payment,
-    Reference,
-    Proof_of_Payment,
-    Date_Releasing,
-    Processing_Officer,
-    Status,
-  };
-}
-
-const rows = [
-  createData(
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "2",
-    "2",
-    "22"
-  ),
-];
-
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [listRequest, setListRequest] = React.useState([]);
+  const [dataRequest, setDataRequest] = React.useState({
+    _id: "",
+    controlNumber: "",
+    studentId: "",
+    isOwner: "",
+    documentationType: "",
+    noOfCopies: "",
+    emailAddress: "",
+  });
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {
@@ -250,7 +204,6 @@ export default function StickyHeadTable() {
     register,
     handleSubmit,
     watch,
-
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -260,31 +213,36 @@ export default function StickyHeadTable() {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
-  const handleDelete = async (id : any ) => {
-try {
-    const token = localStorage.getItem("token")
-  const response = await DeleteRequest.delete(token, id )
-  if(response.status)
-  {
-    getListOfRequest();
-    notifySuccess("Seccessfully Deleted!")
-  }
-  else
-  {
-    notifyError("Something went wrong!")
-  }
 
-} catch (error) {
-  notifyError("Something went wrong!")
-  
-}
+  const [openUpdate, setOpenUpdate] = React.useState(false);
 
-    console.log("delete",id);
+  const handleOpenUpdate = (event: any) => {
+    event.preventDefault();
+    setOpenUpdate(true);
+  };
+  const handleCloseUpdate = () => {
+    reset();
+    setOpenUpdate(false);
+  };
+  const handleDelete = async (id: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await DeleteRequest.delete(token, id);
+      if (response.status) {
+        getListOfRequest();
+        notifySuccess("Seccessfully Deleted!");
+      } else {
+        notifyError("Something went wrong!");
+      }
+    } catch (error) {
+      notifyError("Something went wrong!");
+    }
+
+    console.log("delete", id);
   };
   const onSubmit: SubmitHandler<Inputs> = async (data: any, event: any) => {
     console.log("data is here ", data);
     event.preventDefault();
-
     const dataRequest = {
       controlNumber: data.controlNo,
       studentId: data.studentID,
@@ -292,9 +250,7 @@ try {
       isOwner: data.areYouTheOwner,
       documentationType: data.documentName,
       noOfCopies: data.noCopies,
-      relationshipToOwnwer: data.relationshipToOwnwer,
     };
-
     const token = localStorage.getItem("token");
     console.log(dataRequest, "data form request ! ");
     try {
@@ -313,9 +269,38 @@ try {
       console.log(error);
     }
   };
+  const onSubmitUpdate: SubmitHandler<Inputs> = async (
+    data: any,
+    event: any
+  ) => {
+    console.log("data is here ", data);
+    const id = dataRequest._id;
+    console.log("data 123 here ", id);
+
+    event.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const response = await UpdateRequest.update(token, data, id);
+      if (response.status) {
+        console.log("updated!");
+        getListOfRequest();
+        setOpenUpdate(false);
+      } else {
+        console.log("Something Went wrong !");
+      }
+    } catch (error) {
+      console.log("Something Went wrong !");
+    }
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleUpdate = (request: any) => {
+    setDataRequest(request);
+    setOpenUpdate(true);
+    console.log("update ! ", request);
   };
 
   const handleChangeRowsPerPage = (
@@ -337,7 +322,7 @@ try {
       console.log(response);
     } catch (error) {}
   };
-
+  console.log(dataRequest.controlNumber, "1233333333");
   useEffect(() => {
     getListOfRequest();
   }, []);
@@ -409,7 +394,7 @@ try {
                               key={index++}
                             >
                               <TableCell>{list.controlNumber}</TableCell>
-                              <TableCell>{list.ownerId}</TableCell>
+                              <TableCell>{list.studentId}</TableCell>
                               <TableCell align="right">
                                 {list.isOwner}
                               </TableCell>
@@ -421,18 +406,18 @@ try {
                               </TableCell>
 
                               <TableCell align="right">
-                                <p>wala pa </p>
-                              </TableCell>
-                              <TableCell align="right">
                                 {new Date(list.createdAt).toLocaleString()}
                               </TableCell>
                               <TableCell align="right">
-                                <span> {list.status}</span>
+                                <span className=" bg-green-500 px-3 py-1 rounded-md text-white">
+                                  {list.status}
+                                </span>
                               </TableCell>
 
                               <TableCell align="right">
-                                <div className=" flex gap-2">
+                                <div className=" flex gap-2 justify-end">
                                   <button
+                                    onClick={() => handleUpdate(list)}
                                     type="button"
                                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                   >
@@ -440,7 +425,7 @@ try {
                                   </button>
 
                                   <button
-                                    onClick={()=>handleDelete(list._id)}
+                                    onClick={() => handleDelete(list._id)}
                                     type="button"
                                     className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                                   >
@@ -458,7 +443,7 @@ try {
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={listRequest.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
@@ -490,10 +475,10 @@ try {
                 <p className=" mx-2 mt-3 mb-1">Control No.</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("controlNo", { required: true })}
+                  {...register("controlNumber", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.controlNo && <span>This field is required</span>}
+                  {errors.controlNumber && <span>This field is required</span>}
                 </div>
               </div>
               <div>
@@ -541,20 +526,6 @@ try {
                 </div>
               </div>
               <div>
-                <p className=" mx-2 mt-3 mb-1">Relastionship to the owner</p>
-                <input
-                  className=" mx-2 rounded-md py-3 px-10"
-                  {...register("relationshipToOwnwer", { required: true })}
-                />
-                <div className=" mx-2 text-yellow-500">
-                  {errors.relationshipToOwnwer && (
-                    <span>This field is required</span>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className=" flex justify-center">
-              <div>
                 <p className=" mx-2 mt-3 mb-1">No. Copies</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
@@ -564,17 +535,8 @@ try {
                   {errors.noCopies && <span>This field is required</span>}
                 </div>
               </div>
-              {/* <div>
-                <p className=" mx-2 mt-3 mb-1 ">Date Request</p>
-                <input
-                  className=" mx-2 rounded-md py-3 px-10"
-                  {...register("dateRequest", { required: true })}
-                />
-                <div className=" mx-2 text-yellow-500">
-                  {errors.dateRequest && <span>This field is required</span>}
-                </div>
-              </div> */}
             </div>
+
             <div className=" flex justify-center my-10 mx-2 gap-5">
               {/* <Link href="/"> */}
               <button
@@ -591,6 +553,114 @@ try {
           </form>
         </Box>
       </Modal>
+      {/* modal to update */}
+      <Modal
+        className=" "
+        open={openUpdate}
+        onClose={handleCloseUpdate}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <form
+            onSubmit={handleSubmit(onSubmitUpdate)}
+            className=" bg-slate-400 rounded-md py-5"
+          >
+            <div className=" flex justify-center">
+              <p className=" my-5 px-10 p-3  rounded-3xl font-bold text-white bg-slate-500">
+                Update Information
+              </p>
+            </div>
+            <div className=" flex justify-center">
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Control No.</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("controlNumber", { required: true })}
+                  defaultValue={dataRequest.controlNumber}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.controlNumber && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Student ID</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  defaultValue={dataRequest.studentId}
+                  {...register("studentID", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.studentID && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+            <div className=" flex justify-center">
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Email Address</p>
+                <input
+                  defaultValue={dataRequest.emailAddress}
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("emailAddress", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.emailAddress && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Are you the owner</p>
+                <input
+                  defaultValue={dataRequest.isOwner}
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("areYouTheOwner", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.areYouTheOwner && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+            <div className=" flex justify-center">
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Document Name</p>
+                <input
+                  defaultValue={dataRequest.documentationType}
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("documentName", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.documentName && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">No. Copies</p>
+                <input
+                  defaultValue={dataRequest.noOfCopies}
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("noCopies", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.noCopies && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+
+            <div className=" flex justify-center my-10 mx-2 gap-5">
+              {/* <Link href="/"> */}
+              <button
+                onClick={handleCloseUpdate}
+                className="  hover:bg-green-800 rounded-md bg-green-600 py-3 px-5 text-white"
+              >
+                Back
+              </button>
+              {/* </Link> */}
+              <button className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white">
+                Continue
+              </button>
+            </div>
+          </form>
+        </Box>
+      </Modal>
+
       <ToastContainer />
     </div>
   );
