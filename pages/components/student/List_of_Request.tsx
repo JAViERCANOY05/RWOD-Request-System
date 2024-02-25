@@ -22,11 +22,11 @@ import UpdateRequest from "@/pages/api/updaRequest";
 
 type Inputs = {
   controlNumber: string;
-  studentID: string;
+  studentId: string;
   emailAddress: string;
-  areYouTheOwner: string;
-  documentName: string;
-  noCopies: string;
+  isOwner: string;
+  documentationType: string;
+  noOfCopies: string;
   dateRequest: string;
   // relationshipToOwnwer: string;
 };
@@ -244,12 +244,12 @@ export default function StickyHeadTable() {
     console.log("data is here ", data);
     event.preventDefault();
     const dataRequest = {
-      controlNumber: data.controlNo,
-      studentId: data.studentID,
+      controlNumber: data.controlNumber,
+      studentId: data.studentId,
       emailAddress: data.emailAddress,
-      isOwner: data.areYouTheOwner,
-      documentationType: data.documentName,
-      noOfCopies: data.noCopies,
+      isOwner: data.isOwner,
+      documentationType: data.documentationType,
+      noOfCopies: data.noOfCopies,
     };
     const token = localStorage.getItem("token");
     console.log(dataRequest, "data form request ! ");
@@ -275,21 +275,23 @@ export default function StickyHeadTable() {
   ) => {
     console.log("data is here ", data);
     const id = dataRequest._id;
-    console.log("data 123 here ", id);
-
     event.preventDefault();
     try {
       const token = localStorage.getItem("token");
       const response = await UpdateRequest.update(token, data, id);
       if (response.status) {
+        reset();
+        notifySuccess("Successfully Updated");
         console.log("updated!");
         getListOfRequest();
         setOpenUpdate(false);
       } else {
+        notifyError("Something went wrong !");
         console.log("Something Went wrong !");
       }
     } catch (error) {
       console.log("Something Went wrong !");
+      notifyError("Something went wrong !");
     }
   };
 
@@ -485,10 +487,10 @@ export default function StickyHeadTable() {
                 <p className=" mx-2 mt-3 mb-1">Student ID</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("studentID", { required: true })}
+                  {...register("studentId", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.studentID && <span>This field is required</span>}
+                  {errors.studentId && <span>This field is required</span>}
                 </div>
               </div>
             </div>
@@ -507,10 +509,10 @@ export default function StickyHeadTable() {
                 <p className=" mx-2 mt-3 mb-1">Are you the owner</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("areYouTheOwner", { required: true })}
+                  {...register("isOwner", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.areYouTheOwner && <span>This field is required</span>}
+                  {errors.isOwner && <span>This field is required</span>}
                 </div>
               </div>
             </div>
@@ -519,20 +521,22 @@ export default function StickyHeadTable() {
                 <p className=" mx-2 mt-3 mb-1">Document Name</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("documentName", { required: true })}
+                  {...register("documentationType", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.documentName && <span>This field is required</span>}
+                  {errors.documentationType && (
+                    <span>This field is required</span>
+                  )}
                 </div>
               </div>
               <div>
                 <p className=" mx-2 mt-3 mb-1">No. Copies</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("noCopies", { required: true })}
+                  {...register("noOfCopies", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.noCopies && <span>This field is required</span>}
+                  {errors.noOfCopies && <span>This field is required</span>}
                 </div>
               </div>
             </div>
@@ -567,7 +571,7 @@ export default function StickyHeadTable() {
             className=" bg-slate-400 rounded-md py-5"
           >
             <div className=" flex justify-center">
-              <p className=" my-5 px-10 p-3  rounded-3xl font-bold text-white bg-slate-500">
+              <p className=" my-5 px-10 p-3  rounded-3xl font-bold text-white bg-green-500">
                 Update Information
               </p>
             </div>
@@ -588,10 +592,10 @@ export default function StickyHeadTable() {
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
                   defaultValue={dataRequest.studentId}
-                  {...register("studentID", { required: true })}
+                  {...register("studentId", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.studentID && <span>This field is required</span>}
+                  {errors.studentId && <span>This field is required</span>}
                 </div>
               </div>
             </div>
@@ -612,10 +616,10 @@ export default function StickyHeadTable() {
                 <input
                   defaultValue={dataRequest.isOwner}
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("areYouTheOwner", { required: true })}
+                  {...register("isOwner", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.areYouTheOwner && <span>This field is required</span>}
+                  {errors.isOwner && <span>This field is required</span>}
                 </div>
               </div>
             </div>
@@ -625,10 +629,12 @@ export default function StickyHeadTable() {
                 <input
                   defaultValue={dataRequest.documentationType}
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("documentName", { required: true })}
+                  {...register("documentationType", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.documentName && <span>This field is required</span>}
+                  {errors.documentationType && (
+                    <span>This field is required</span>
+                  )}
                 </div>
               </div>
               <div>
@@ -636,10 +642,10 @@ export default function StickyHeadTable() {
                 <input
                   defaultValue={dataRequest.noOfCopies}
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("noCopies", { required: true })}
+                  {...register("noOfCopies", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.noCopies && <span>This field is required</span>}
+                  {errors.noOfCopies && <span>This field is required</span>}
                 </div>
               </div>
             </div>
