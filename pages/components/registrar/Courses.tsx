@@ -7,7 +7,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Link from "next/link";
 import GetCourse from "@/pages/api/getCourse";
 import DeleteCourse from "@/pages/api/deleteCourse";
 import Box from "@mui/material/Box";
@@ -200,7 +199,7 @@ export default function StickyHeadTable() {
                           </button>
                           {/* </Link> */}
                           <button
-                            onClick={() => handleDeleteCourse(course._id)}
+                            onClick={() => handleDeleteCourse(course.id)}
                             type="button"
                             className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                           >

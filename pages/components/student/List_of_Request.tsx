@@ -237,8 +237,6 @@ export default function StickyHeadTable() {
     } catch (error) {
       notifyError("Something went wrong!");
     }
-
-    console.log("delete", id);
   };
   const onSubmit: SubmitHandler<Inputs> = async (data: any, event: any) => {
     console.log("data is here ", data);
@@ -427,7 +425,7 @@ export default function StickyHeadTable() {
                                   </button>
 
                                   <button
-                                    onClick={() => handleDelete(list._id)}
+                                    onClick={() => handleDelete(list.id)}
                                     type="button"
                                     className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                                   >
