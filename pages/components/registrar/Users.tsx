@@ -141,14 +141,12 @@ export default function StickyHeadTable() {
           Users List
         </p>
       </div>
-      <Link href="/components/registrar/Add_Student">
-        <button
-          type="button"
-          className="focus:outline-none font-bold  my-10 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-        >
-          Add User
-        </button>
-      </Link>
+      <button
+        type="button"
+        className="focus:outline-none font-bold  my-10 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+      >
+        Add User
+      </button>
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
