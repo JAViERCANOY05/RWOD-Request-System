@@ -21,12 +21,12 @@ import MailIcon from "@mui/icons-material/Mail";
 import Dashboard from "./Dashboard";
 import { useState } from "react";
 import Link from "next/link";
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form";
 
 type Inputs = {
-  example: string
-  exampleRequired: string
-}
+  example: string;
+  exampleRequired: string;
+};
 
 const drawerWidth = 240;
 
@@ -125,10 +125,9 @@ export default function MiniDrawer() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<Inputs>()
-  
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
-  
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
