@@ -189,7 +189,7 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [listRequest, setListRequest] = React.useState([]);
   const [dataRequest, setDataRequest] = React.useState({
-    _id: "",
+    id: "",
     controlNumber: "",
     studentId: "",
     isOwner: "",
@@ -239,7 +239,6 @@ export default function StickyHeadTable() {
     }
   };
   const onSubmit: SubmitHandler<Inputs> = async (data: any, event: any) => {
-    console.log("data is here ", data);
     event.preventDefault();
     const dataRequest = {
       controlNumber: data.controlNumber,
@@ -249,8 +248,9 @@ export default function StickyHeadTable() {
       documentationType: data.documentationType,
       noOfCopies: data.noOfCopies,
     };
+
     const token = localStorage.getItem("token");
-    console.log(dataRequest, "data form request ! ");
+    console.log(dataRequest, "data Submited !");
     try {
       const data = await RequestForm.request(dataRequest, token);
       if (data.status) {
@@ -272,8 +272,9 @@ export default function StickyHeadTable() {
     event: any
   ) => {
     console.log("data is here ", data);
-    const id = dataRequest._id;
+    const id = dataRequest.id;
     event.preventDefault();
+
     try {
       const token = localStorage.getItem("token");
       const response = await UpdateRequest.update(token, data, id);
@@ -322,7 +323,6 @@ export default function StickyHeadTable() {
       console.log(response);
     } catch (error) {}
   };
-  console.log(dataRequest.controlNumber, "1233333333");
   useEffect(() => {
     getListOfRequest();
   }, []);
