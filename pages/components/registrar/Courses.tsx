@@ -18,6 +18,8 @@ import AddCourse from "@/pages/api/addCourse";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "@/pages/Notifications";
+import UpdateCourse from "@/pages/api/updateCourse";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type Inputs = {
   example: string;
@@ -65,9 +67,19 @@ export default function StickyHeadTable() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+  const handleOpenUpdate = () => setOpenUpdate(true);
+  const handleCloseUpdate = () => setOpenUpdate(false);
+
   const [addCourse, setAddCourse] = React.useState({
     course: "",
     discription: "",
+  });
+
+  const [addCourseUpdate, setAddCourseUpdate] = React.useState({
+    id: "",
+    name: "",
+    description: "",
   });
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -87,6 +99,15 @@ export default function StickyHeadTable() {
       [name]: value,
     }));
   };
+
+  const handleChangeUpdate = (e: any) => {
+    const { name, value } = e.target;
+    setAddCourseUpdate((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const getCourseList = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -99,8 +120,10 @@ export default function StickyHeadTable() {
       console.log(error, "Error");
     }
   };
-  const handleUpdate = () => {
-    notifyError("Under Coding!");
+  const handleUpdate = (data: any) => {
+    console.log(data);
+    setAddCourseUpdate(data);
+    handleOpenUpdate();
   };
 
   const handleDeleteCourse = async (couseID: any) => {
@@ -142,6 +165,34 @@ export default function StickyHeadTable() {
     });
   };
 
+  const handlerSubmitUpdateCourse = async (e: any) => {
+    e.preventDefault();
+    const data = {
+      name: addCourseUpdate.name,
+      description: addCourseUpdate.description,
+    };
+    console.log(data, "123");
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await UpdateCourse.update(
+        token,
+        data,
+        addCourseUpdate.id
+      );
+      if (response.status) {
+        getCourseList();
+        handleCloseUpdate();
+        notifySuccess("Course Updated!");
+      } else {
+        notifyError("Something went wrong!");
+      }
+    } catch (error) {
+      notifyError("Something went wrong!");
+      console.log("err");
+    }
+  };
+
   React.useEffect(() => {
     getCourseList();
   }, []);
@@ -178,38 +229,49 @@ export default function StickyHeadTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {course
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((course: any, index = 0) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={index++}>
-                      <TableCell>{course.name}</TableCell>
-
-                      <TableCell>{course.description}</TableCell>
-
-                      <TableCell align="right">
-                        <div>
-                          {/* <Link href="/components/registrar/Edit_Course"> */}
-                          <button
-                            onClick={handleUpdate}
-                            type="button"
-                            className="focus:outline-none font-bold   text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                          >
-                            Update
-                          </button>
-                          {/* </Link> */}
-                          <button
-                            onClick={() => handleDeleteCourse(course.id)}
-                            type="button"
-                            className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+              {course.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={3} align="center">
+                      <CircularProgress />
+                  </TableCell>
+                </TableRow>
+              ) : (
+                course
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((course: any, index = 0) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={index++}
+                      >
+                        <TableCell>{course.name}</TableCell>
+                        <TableCell>{course.description}</TableCell>
+                        <TableCell align="right">
+                          <div>
+                            <button
+                              onClick={() => {
+                                handleUpdate(course);
+                              }}
+                              type="button"
+                              className="focus:outline-none font-bold   text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                            >
+                              Update
+                            </button>
+                            <button
+                              onClick={() => handleDeleteCourse(course.id)}
+                              type="button"
+                              className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -290,6 +352,76 @@ export default function StickyHeadTable() {
           </div>
         </Box>
       </Modal>
+      <Modal
+        open={openUpdate}
+        onClose={handleCloseUpdate}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className=" flex justify-center rounded-md bg-green-400 py-3 mb-3 text-white">
+            <h2>Update Course</h2>
+          </div>
+          <div>
+            <label
+              htmlFor="course"
+              className="block text-sm font-medium leading-6 "
+            >
+              Course
+            </label>
+            <div className="mt-2">
+              <input
+                // value={addCourse.course}
+                defaultValue={addCourseUpdate.name}
+                onChange={handleChangeUpdate}
+                id="name"
+                name="name"
+                autoComplete="name"
+                required
+                className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="discription"
+              className="block text-sm font-medium leading-6 "
+            >
+              Discription
+            </label>
+            <div className="mt-2">
+              <input
+                defaultValue={addCourseUpdate.description}
+                // value={addCourse.discription}
+                onChange={handleChangeUpdate}
+                id="description"
+                name="description"
+                autoComplete="description"
+                required
+                className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div className=" flex justify-end mt-3">
+            <button
+              onClick={handleCloseUpdate}
+              type="button"
+              className="focus:outline-none font-bold  my-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={handlerSubmitUpdateCourse}
+              type="button"
+              className="focus:outline-none font-bold  my-3 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            >
+              Submit
+            </button>
+          </div>
+        </Box>
+      </Modal>
+
       <ToastContainer />
     </div>
   );
