@@ -248,10 +248,9 @@ export default function StickyHeadTable() {
       documentationType: data.documentationType,
       noOfCopies: data.noOfCopies,
     };
-
-    const token = localStorage.getItem("token");
     console.log(dataRequest, "data Submited !");
     try {
+      const token = localStorage.getItem("token");
       const data = await RequestForm.request(dataRequest, token);
       if (data.status) {
         notifySuccess("Add succesfully");
@@ -264,7 +263,6 @@ export default function StickyHeadTable() {
       }
     } catch (error) {
       notifyError("Something went wrong ! ");
-      console.log(error);
     }
   };
   const onSubmitUpdate: SubmitHandler<Inputs> = async (
@@ -516,7 +514,7 @@ export default function StickyHeadTable() {
             </div>
             <div className=" flex justify-center">
               <div>
-                <p className=" mx-2 mt-3 mb-1">Document Name</p>
+                <p className=" mx-2 mt-3 mb-1">Document Name </p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
                   {...register("documentationType", { required: true })}
@@ -649,14 +647,12 @@ export default function StickyHeadTable() {
             </div>
 
             <div className=" flex justify-center my-10 mx-2 gap-5">
-              {/* <Link href="/"> */}
               <button
                 onClick={handleCloseUpdate}
                 className="  hover:bg-green-800 rounded-md bg-green-600 py-3 px-5 text-white"
               >
                 Back
               </button>
-              {/* </Link> */}
               <button className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white">
                 Continue
               </button>
