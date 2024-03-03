@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Logo from "../styles/image/download-removebg-preview.png";
 import { useRouter } from "next/navigation"; // Correct import
@@ -6,9 +6,13 @@ import LoginAPI from "./api/login_api";
 import { notifyError } from "./Notifications";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TextField from "@mui/material/TextField";
+import { FaRegEyeSlash } from "react-icons/fa";
+import { FaRegEye } from "react-icons/fa";
+
 export default function Example() {
   const router = useRouter();
-
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
@@ -44,7 +48,7 @@ export default function Example() {
       } else if (response.user.role === "student") {
         localStorage.setItem("token", response.token);
 
-        console.log("role", response.user.role);
+        console.log("role", response);
         router.push("/components/registrar/Student_Drawer");
       }
     } catch (err: any) {
@@ -96,16 +100,33 @@ export default function Example() {
                     >
                       Password
                     </label>
-                    <div className="mt-2">
+                    <div className="mt-2 relative">
                       <input
                         value={formData.password}
                         onChange={handleChange}
                         id="password"
                         name="password"
-                        type="password"
+                        type={isPasswordVisible ? "text" : "password"}
                         required
                         className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
+                     {isPasswordVisible ? (
+      <button
+        type="button"
+        className="absolute inset-y-0 right-0 px-2 py-1.5 text-gray-900"
+        onClick={() => setIsPasswordVisible(false)}
+      >
+        <FaRegEye />
+      </button>
+    ) : (
+      <button
+        type="button"
+        className="absolute inset-y-0 right-0 px-2 py-1.5 text-gray-900"
+        onClick={() => setIsPasswordVisible(true)}
+      >
+        <FaRegEyeSlash />
+      </button>
+    )}
                     </div>
                   </div>
                   <div className="flex justify-end">
