@@ -1,6 +1,5 @@
 const RequestForm = {
-  //for log-in users !
-  request: async (request_form: any, token: any) => {
+  request: async (data: any, token: any) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/addRequest`,
@@ -10,7 +9,7 @@ const RequestForm = {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(request_form),
+          body: JSON.stringify(data),
         }
       );
       if (response.ok) {
