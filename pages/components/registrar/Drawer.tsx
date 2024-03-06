@@ -170,7 +170,7 @@ export default function MiniDrawer() {
   const router = useRouter();
 
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [displayComponent, setDisplayComponent] = useState(<Dashboard />);
 
   const LogOut = () => {

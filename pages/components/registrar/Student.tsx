@@ -18,6 +18,8 @@ import Modal from "@mui/material/Modal";
 import AddCourse from "@/pages/api/addCourse";
 import AddUser from "@/pages/api/addUser";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -99,7 +101,6 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [studentList, setStudentList] = React.useState([]);
-  const [userId, setUserId] = React.useState();
   const [user, setUser] = React.useState({
     firstName: "",
     lastName: "",
@@ -233,7 +234,7 @@ export default function StickyHeadTable() {
             <TableBody>
               {studentList.length === 0 ? (
                 <TableCell align="center" colSpan={7}>
-                  Loading...
+                 <CircularProgress/>
                 </TableCell>
               ) : (
                 studentList
@@ -247,7 +248,7 @@ export default function StickyHeadTable() {
                         tabIndex={-1}
                         key={index++}
                       >
-                        <TableCell>{student._id}</TableCell>
+                        <TableCell>{student.id}</TableCell>
                         <TableCell>{student.firstName}</TableCell>
                         <TableCell align="right">{student.course}</TableCell>
                         <TableCell align="right">{student.year}</TableCell>
@@ -283,7 +284,7 @@ export default function StickyHeadTable() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={rows.length}
+          count={studentList.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -373,18 +374,24 @@ export default function StickyHeadTable() {
                   Course
                 </label>
                 <div className="mt-2">
-                  <input
-                    value={user.course}
-                    onChange={handleChange}
-                    id="course"
-                    name="course"
-                    type="course"
-                    autoComplete="course"
-                    required
-                    className="block font-bold px-20 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
+                <select
+                  value={user.course}
+                  onChange={handleChange}
+                  id="course"
+                  name="course"
+                  autoComplete="course"
+                  required
+                  className="block font-bold w-72 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                >
+                  <option value="" >Choose a course</option>
+                  <option value="course1">Course 1</option>
+                  <option value="course2">Course 2</option>
+                  <option value="course3">Course 3</option>
+                </select>
               </div>
+
+              </div>
+            
               <div className=" flex  my-3">
                 <label
                   htmlFor="email"
