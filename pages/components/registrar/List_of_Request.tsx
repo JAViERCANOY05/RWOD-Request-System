@@ -14,6 +14,7 @@ import DeleteRequest from "@/pages/api/deleteRequest";
 import { notifyError, notifySuccess } from "@/pages/Notifications";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface Column {
   id:
@@ -327,8 +328,8 @@ export default function StickyHeadTable() {
                 </TableHead>
                 <TableBody>
                   {listOfRequest.length === 0 ? (
-                    <TableCell align="center" colSpan={6}>
-                      Loading...
+                    <TableCell align="center" colSpan={7}>
+                      <CircularProgress />
                     </TableCell>
                   ) : (
                     listOfRequest
@@ -344,7 +345,7 @@ export default function StickyHeadTable() {
                           key={index}
                         >
                           <TableCell>{list.controlNumber}</TableCell>
-                          <TableCell>{list.ownerId}</TableCell>
+                          <TableCell>{list.studentId}</TableCell>
                           <TableCell align="right">{list.isOwner}</TableCell>
                           <TableCell align="right">{list.noOfCopies}</TableCell>
                           <TableCell align="right">
@@ -374,7 +375,7 @@ export default function StickyHeadTable() {
                               </button>
                               {/* </Link> */}
                               <button
-                                onClick={() => handleDeleteUser(list._id)}
+                                onClick={() => handleDeleteUser(list.id)}
                                 type="button"
                                 className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                               >
@@ -391,7 +392,7 @@ export default function StickyHeadTable() {
             <TablePagination
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
-              count={rows.length}
+              count={listOfRequest.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
