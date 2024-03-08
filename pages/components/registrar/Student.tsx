@@ -183,6 +183,7 @@ export default function StickyHeadTable() {
       console.log("Something Went wrong");
     }
   };
+  console.log(studentList, "111111111");
 
   React.useEffect(() => {
     GetStudentList();
@@ -234,7 +235,7 @@ export default function StickyHeadTable() {
             <TableBody>
               {studentList.length === 0 ? (
                 <TableCell align="center" colSpan={7}>
-                 <CircularProgress/>
+                  <CircularProgress />
                 </TableCell>
               ) : (
                 studentList
@@ -248,7 +249,7 @@ export default function StickyHeadTable() {
                         tabIndex={-1}
                         key={index++}
                       >
-                        <TableCell>{student.id}</TableCell>
+                        <TableCell>{student._id}</TableCell>
                         <TableCell>{student.firstName}</TableCell>
                         <TableCell align="right">{student.course}</TableCell>
                         <TableCell align="right">{student.year}</TableCell>
@@ -374,24 +375,23 @@ export default function StickyHeadTable() {
                   Course
                 </label>
                 <div className="mt-2">
-                <select
-                  value={user.course}
-                  onChange={handleChange}
-                  id="course"
-                  name="course"
-                  autoComplete="course"
-                  required
-                  className="block font-bold w-72 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="" >Choose a course</option>
-                  <option value="course1">Course 1</option>
-                  <option value="course2">Course 2</option>
-                  <option value="course3">Course 3</option>
-                </select>
+                  <select
+                    value={user.course}
+                    onChange={handleChange}
+                    id="course"
+                    name="course"
+                    autoComplete="course"
+                    required
+                    className="block font-bold w-72 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="">Choose a course</option>
+                    <option value="course1">Course 1</option>
+                    <option value="course2">Course 2</option>
+                    <option value="course3">Course 3</option>
+                  </select>
+                </div>
               </div>
 
-              </div>
-            
               <div className=" flex  my-3">
                 <label
                   htmlFor="email"
