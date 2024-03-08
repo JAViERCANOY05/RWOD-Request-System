@@ -67,11 +67,6 @@ const component: display[] = [
     icon: <BiSolidDashboard style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Dashboard",
   },
-  {
-    name: "Courses",
-    icon: <SiCoursera style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Courses",
-  },
 
   {
     name: "Student",
@@ -192,8 +187,6 @@ export default function MiniDrawer() {
   const handlerClick = (item: any) => {
     if (item === "Dashboard") {
       setDisplayComponent(<Dashboard />);
-    } else if (item === "Courses") {
-      setDisplayComponent(<Courses />);
     } else if (item === "Student") {
       setDisplayComponent(<Student />);
     } else if (item === "All Request") {

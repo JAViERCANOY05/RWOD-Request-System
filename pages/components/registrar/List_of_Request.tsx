@@ -43,78 +43,28 @@ interface Column {
 const columns: readonly Column[] = [
   { id: "Control Number", label: "Control Number", minWidth: 170 },
   { id: "User ID No", label: "User ID No", minWidth: 100 },
-  // {
-  //   id: "Name",
-  //   label: "Name",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Course",
-  //   label: "Course",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
+
   {
     id: "Are you the Owner",
     label: "Are you the Owner",
     minWidth: 170,
     align: "right",
   },
-  // {
-  //   id: "Relationship of Owner",
-  //   label: "Relationship of Owner",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
+
   {
     id: "No of Copy",
     label: "No of Copy",
     minWidth: 170,
     align: "right",
   },
-  // {
-  //   id: "Total Amount",
-  //   label: "Total Amount",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
+
   {
     id: "Date Request",
     label: "Date Request",
     minWidth: 170,
     align: "right",
   },
-  // {
-  //   id: "Date Payment",
-  //   label: "Date Payment",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Reference",
-  //   label: "Reference",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Proof of Payment",
-  //   label: "Proof of Payment",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Date Releasing",
-  //   label: "Date Releasing",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Processing Officer",
-  //   label: "Processing Officer",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
+
   {
     id: "Status",
     label: "Status",
@@ -182,60 +132,6 @@ function createData(
     Status,
   };
 }
-
-const rows = [
-  createData(
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "2",
-    "2",
-    "22"
-  ),
-  createData(
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "2",
-    "2",
-    "22"
-  ),
-  createData(
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "India",
-    "IN",
-    "2",
-    "2",
-    "2",
-    "2",
-    "22"
-  ),
-];
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
@@ -375,7 +271,7 @@ export default function StickyHeadTable() {
                               </button>
                               {/* </Link> */}
                               <button
-                                onClick={() => handleDeleteUser(list.id)}
+                                onClick={() => handleDeleteUser(list._id)}
                                 type="button"
                                 className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                               >

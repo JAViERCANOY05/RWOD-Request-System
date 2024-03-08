@@ -55,12 +55,6 @@ const component: display[] = [
     icon: <BiSolidDashboard style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Dashboard",
   },
-  //recommend to delete
-  {
-    name: "Request new",
-    icon: <InboxIcon style={{ fontSize: "1.5em", color: "#FC412F" }} />,
-    href: "Request new",
-  },
 
   {
     name: "List of Request",
@@ -177,8 +171,6 @@ export default function MiniDrawer() {
   const handlerClick = (item: any) => {
     if (item === "Dashboard") {
       setDisplayComponent(<Dashboard />);
-    } else if (item === "Request new") {
-      setDisplayComponent(<Request_New />);
     } else if (item === "List of Request") {
       setDisplayComponent(<List_of_Request />);
     } else if (item === "Profile") {
@@ -199,8 +191,8 @@ export default function MiniDrawer() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <Box sx={{ display: "flex" }} className="">
+      <CssBaseline/>
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
