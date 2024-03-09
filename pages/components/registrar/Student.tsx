@@ -385,9 +385,22 @@ export default function StickyHeadTable() {
                     className="block font-bold w-72 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   >
                     <option value="">Choose a course</option>
-                    <option value="course1">Course 1</option>
-                    <option value="course2">Course 2</option>
-                    <option value="course3">Course 3</option>
+                    <option value="course1">
+                      College of Teacher Education (CTE)
+                    </option>
+                    <option value="course2">
+                      College of Business and Management (CBM)
+                    </option>
+                    <option value="course3">
+                      Hotel and Business Management
+                    </option>
+                    <option value="course3">College of Science (COS) </option>
+                    <option value="course3">
+                      Environment and Computer science{" "}
+                    </option>
+                    <option value="course3">
+                      College of Fisheries and Marine Sciences (CFMS)
+                    </option>
                   </select>
                 </div>
               </div>

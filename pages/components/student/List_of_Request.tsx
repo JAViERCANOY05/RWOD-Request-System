@@ -28,6 +28,8 @@ type Inputs = {
   documentationType: string;
   noOfCopies: string;
   dateRequest: string;
+  purpose: string;
+
   // relationshipToOwnwer: string;
 };
 const style = {
@@ -196,6 +198,7 @@ export default function StickyHeadTable() {
     documentationType: "",
     noOfCopies: "",
     emailAddress: "",
+    purpose: "",
   });
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -247,6 +250,7 @@ export default function StickyHeadTable() {
       isOwner: data.isOwner,
       documentationType: data.documentationType,
       noOfCopies: data.noOfCopies,
+      purpose: data.purpose,
     };
     console.log(dataRequest, "data Submited !");
     try {
@@ -533,6 +537,20 @@ export default function StickyHeadTable() {
                 />
                 <div className=" mx-2 text-yellow-500">
                   {errors.noOfCopies && <span>This field is required</span>}
+                </div>
+              </div>
+
+              {/* purpose : string */}
+            </div>
+            <div className=" flex justify-center">
+              <div className="">
+                <p className=" mx-2 mt-3 mb-1">Purpose</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("purpose", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.purpose && <span>This field is required</span>}
                 </div>
               </div>
             </div>

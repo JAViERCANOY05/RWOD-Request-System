@@ -133,7 +133,6 @@ const Settings = () => {
             <div className="my-2 font-semibold">First Name : {name}</div>
             <div className="my-2 font-semibold">Last Name : {last}</div>
             <div className="my-2 font-semibold">Email : {email}</div>
-            <div className="my-2 font-semibold">Course : {course}</div>
           </div>
         </Box>
       </Modal>

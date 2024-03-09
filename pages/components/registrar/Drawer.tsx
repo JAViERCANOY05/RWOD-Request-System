@@ -44,6 +44,7 @@ import { PiStudentBold } from "react-icons/pi";
 import { FaCodePullRequest } from "react-icons/fa6";
 import { FaUsers } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
+import Profile from "./Profile";
 
 const style = {
   position: "absolute" as "absolute",
@@ -87,6 +88,11 @@ const component: display[] = [
     name: "Reports",
     icon: <TbReportSearch style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Reports",
+  },
+  {
+    name: "Profile",
+    icon: <CgProfile style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Profile",
   },
 
   // Add more trees as needed
@@ -195,8 +201,11 @@ export default function MiniDrawer() {
       setDisplayComponent(<Users />);
     } else if (item === "Reports") {
       setDisplayComponent(<Reports />);
+    } else if (item === "Profile") {
+      setDisplayComponent(<Profile />);
     }
   };
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open1 = Boolean(anchorEl);
 
