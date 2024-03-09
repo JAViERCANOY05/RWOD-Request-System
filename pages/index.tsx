@@ -39,15 +39,32 @@ export default function Example() {
       console.log("response", response.user.role);
       if (response.user.role === "registrar") {
         localStorage.setItem("token", response.token);
+        localStorage.setItem("course", response.user.course);
+        localStorage.setItem("firstName", response.user.firstName);
+        localStorage.setItem("lastName", response.user.lastName);
+        localStorage.setItem("email", response.user.email);
+        localStorage.setItem("role", response.user.role);
+
         router.push("/components/registrar/Drawer");
         console.log("role", response.user.role);
       } else if (response.user.role === "cashier") {
         localStorage.setItem("token", response.token);
+        localStorage.setItem("course", response.user.course);
+        localStorage.setItem("firstName", response.user.firstName);
+        localStorage.setItem("lastName", response.user.lastName);
+        localStorage.setItem("email", response.user.email);
+        localStorage.setItem("role", response.user.role);
+
         router.push("/components/cashier");
         console.log("role", response.existUser.role);
       } else if (response.user.role === "student") {
-        localStorage.setItem("token", response.token);
+        localStorage.setItem("course", response.user.course);
+        localStorage.setItem("firstName", response.user.firstName);
+        localStorage.setItem("lastName", response.user.lastName);
+        localStorage.setItem("email", response.user.email);
+        localStorage.setItem("role", response.user.role);
 
+        localStorage.setItem("token", response.token);
         console.log("role", response);
         router.push("/components/registrar/Student_Drawer");
       }
@@ -110,23 +127,23 @@ export default function Example() {
                         required
                         className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
-                     {isPasswordVisible ? (
-      <button
-        type="button"
-        className="absolute inset-y-0 right-0 px-2 py-1.5 text-gray-900"
-        onClick={() => setIsPasswordVisible(false)}
-      >
-        <FaRegEye />
-      </button>
-    ) : (
-      <button
-        type="button"
-        className="absolute inset-y-0 right-0 px-2 py-1.5 text-gray-900"
-        onClick={() => setIsPasswordVisible(true)}
-      >
-        <FaRegEyeSlash />
-      </button>
-    )}
+                      {isPasswordVisible ? (
+                        <button
+                          type="button"
+                          className="absolute inset-y-0 right-0 px-2 py-1.5 text-gray-900"
+                          onClick={() => setIsPasswordVisible(false)}
+                        >
+                          <FaRegEye />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="absolute inset-y-0 right-0 px-2 py-1.5 text-gray-900"
+                          onClick={() => setIsPasswordVisible(true)}
+                        >
+                          <FaRegEyeSlash />
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="flex justify-end">

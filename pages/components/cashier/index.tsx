@@ -17,6 +17,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
+import Profile from "./Profile";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -81,6 +82,11 @@ const component: display[] = [
     name: "Reports",
     icon: <TbReportSearch style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Reports",
+  },
+  {
+    name: "Profile",
+    icon: <CgProfile style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Profile",
   },
 
   // Add more trees as needed
@@ -178,6 +184,8 @@ export default function MiniDrawer() {
       setDisplayComponent(<User />);
     } else if (item === "Reports") {
       setDisplayComponent(<Reports />);
+    } else if (item === "Profile") {
+      setDisplayComponent(<Profile />);
     }
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

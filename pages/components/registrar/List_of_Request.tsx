@@ -245,7 +245,12 @@ export default function StickyHeadTable() {
                           <TableCell align="right">{list.isOwner}</TableCell>
                           <TableCell align="right">{list.noOfCopies}</TableCell>
                           <TableCell align="right">
-                            {new Date(list.createdAt).toLocaleString()}
+
+                            {new Date(list.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "2-digit",
+                    })}
                           </TableCell>
                           {/* <TableCell align="right">{list.status}</TableCell> */}
                           <TableCell align="right">
