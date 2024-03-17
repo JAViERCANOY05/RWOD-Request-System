@@ -57,7 +57,7 @@ const Dashboard = () => {
         </div>
         <div className=" flex  my-10 justify-center">
           <div className="box-content h-32 w-96 text-white  p-4  border-4 bg-slate-800  rounded-2xl">
-            <p>Complete Request</p>
+            <p> Request</p>
             <p className="pt-5">{data.pending}</p>
             
           </div>

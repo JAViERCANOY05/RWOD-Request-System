@@ -92,7 +92,7 @@ const component: display[] = [
   //   href: "Reports",
   // },
   {
-    name: "Feed Data",
+    name: "FeedBack Data",
     icon: <FeedbackIcon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "FeedBack",
   },
