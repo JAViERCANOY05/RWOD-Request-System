@@ -21,7 +21,7 @@ import Users from "./Users";
 import { useState } from "react";
 import Dashboard from "../student/Dashboard";
 import Logout from "@mui/icons-material/Logout";
-
+import FeedBack from "../student/FeedBack"
 import Request_New from "../student/Request_New";
 import List_of_Request from "../student/List_of_Request";
 import Profile from "../student/Profile";
@@ -32,7 +32,12 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { FaListCheck } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
 import { MdWorkHistory } from "react-icons/md";
-
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import NavigationIcon from '@mui/icons-material/Navigation';
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -66,10 +71,15 @@ const component: display[] = [
     icon: <CgProfile style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Profile",
   },
+  // {
+  //   name: "Transaction History",
+  //   icon: <MdWorkHistory style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+  //   href: "Transaction History",
+  // },
   {
-    name: "Transaction History",
-    icon: <MdWorkHistory style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Transaction History",
+    name: "FeedBack",
+    icon: <FeedbackIcon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "FeedBack",
   },
 
   // Add more trees as needed
@@ -180,6 +190,10 @@ export default function MiniDrawer() {
     } else if (item === "Transaction History") {
       setDisplayComponent(<Transaction_History />);
     }
+    else if (item === "FeedBack") {
+      setDisplayComponent(<FeedBack />);
+    }
+    
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -386,6 +400,7 @@ export default function MiniDrawer() {
           </div>
         </Box>
       </Modal>
+ 
     </Box>
   );
 }

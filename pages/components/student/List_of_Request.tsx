@@ -28,7 +28,11 @@ type Inputs = {
   documentationType: string;
   noOfCopies: string;
   dateRequest: string;
+  name: string;
   purpose: string;
+  year: string;
+  course: string;
+  address: string;
 
   // relationshipToOwnwer: string;
 };
@@ -49,18 +53,13 @@ interface Column {
     | "Control Number"
     | "User ID No"
     | "Name"
+    | "Year"
+    | "Course"
     | "Course"
     | "Are you the Owner"
     | "Relationship of Owner"
     | "Document Name"
     | "No of Copy"
-    // | "Total Amount"
-    // | "Date Request"
-    // | "Date Payment"
-    // | "Reference"
-    // | "Proof of Payment"
-    // | "Date Releasing"
-    // | "Processing Officer"
     | "Date Request"
     | "Status"
     | "Action";
@@ -73,14 +72,11 @@ interface Column {
 
 const columns: readonly Column[] = [
   { id: "Control Number", label: "Control Number", minWidth: 170 },
+  { id: "Name", label: "Name", minWidth: 100 },
+  { id: "Year", label: "Year", minWidth: 100 },
+  { id: "Course", label: "Course", minWidth: 100 },
   { id: "User ID No", label: "User ID No", minWidth: 100 },
-
-  // {
-  //   id: "Course",
-  //   label: "Course",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
+ 
   {
     id: "Are you the Owner",
     label: "Are you the Owner",
@@ -100,54 +96,7 @@ const columns: readonly Column[] = [
     minWidth: 170,
     align: "right",
   },
-  // {
-  //   id: "Relationship of Owner",
-  //   label: "Relationship of Owner",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Total Amount",
-  //   label: "Total Amount",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Date Request",
-  //   label: "Date Request",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Date Payment",
-  //   label: "Date Payment",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Reference",
-  //   label: "Reference",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Proof of Payment",
-  //   label: "Proof of Payment",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Date Releasing",
-  //   label: "Date Releasing",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
-  // {
-  //   id: "Processing Officer",
-  //   label: "Processing Officer",
-  //   minWidth: 170,
-  //   align: "right",
-  // },
+  
   {
     id: "Date Request",
     label: "Date Request",
@@ -169,29 +118,17 @@ const columns: readonly Column[] = [
   // documentationType
 ];
 
-interface Data {
-  Control_Number: string;
-  User_ID_No: string;
-  Name: string;
-  Course: string;
-  Are_you_the_Owner: string;
-  Relationship_of_Owner: string;
-  No_of_Copy: string;
-  Total_Amount: string;
-  Date_Request: string;
-  Date_Payment: string;
-  Reference: string;
-  Proof_of_Payment: string;
-  Date_Releasing: string;
-  Processing_Officer: string;
-  Status: string;
-}
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [listRequest, setListRequest] = React.useState([]);
   const [dataRequest, setDataRequest] = React.useState({
-    id: "",
+    name : "",
+    year : "",
+    course : "",
+    address :"",
+
+    _id: "",
     controlNumber: "",
     studentId: "",
     isOwner: "",
@@ -251,6 +188,10 @@ export default function StickyHeadTable() {
       documentationType: data.documentationType,
       noOfCopies: data.noOfCopies,
       purpose: data.purpose,
+      name : data.name,
+      year : data.year ,
+      course : data.course,
+      address : data.address
     };
     console.log(dataRequest, "data Submited !");
     try {
@@ -274,7 +215,7 @@ export default function StickyHeadTable() {
     event: any
   ) => {
     console.log("data is here ", data);
-    const id = dataRequest.id;
+    const id = dataRequest._id;
     event.preventDefault();
 
     try {
@@ -396,6 +337,10 @@ export default function StickyHeadTable() {
                               key={index++}
                             >
                               <TableCell>{list.controlNumber}</TableCell>
+                              <TableCell>{list.name}</TableCell>
+                              <TableCell>{list.year}</TableCell>
+                              <TableCell>{list.course}</TableCell>
+
                               <TableCell>{list.studentId}</TableCell>
                               <TableCell align="right">
                                 {list.isOwner}
@@ -427,7 +372,7 @@ export default function StickyHeadTable() {
                                   </button>
 
                                   <button
-                                    onClick={() => handleDelete(list.id)}
+                                    onClick={() => handleDelete(list._id)}
                                     type="button"
                                     className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                                   >
@@ -472,6 +417,51 @@ export default function StickyHeadTable() {
                 Fill out Information
               </p>
             </div>
+            <div className=" flex justify-center">
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Name</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("name", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.name && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Year</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("year", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.year && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+            <div className=" flex justify-center">
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Course</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("course", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.course && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Address</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("address", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.address && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+          
             <div className=" flex justify-center">
               <div>
                 <p className=" mx-2 mt-3 mb-1">Control No.</p>
@@ -591,6 +581,56 @@ export default function StickyHeadTable() {
             </div>
             <div className=" flex justify-center">
               <div>
+                <p className=" mx-2 mt-3 mb-1">Name</p>
+                <input
+                  defaultValue={dataRequest.name}
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("name", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.name && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Year</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("year", { required: true })}
+                  defaultValue={dataRequest.year}
+
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.year && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+            <div className=" flex justify-center">
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Course</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("course", { required: true })}
+                  defaultValue={dataRequest.course}
+
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.course && <span>This field is required</span>}
+                </div>
+              </div>
+              <div>
+                <p className=" mx-2 mt-3 mb-1">Address</p>
+                <input
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("address", { required: true })}
+                  defaultValue={dataRequest.address}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.address && <span>This field is required</span>}
+                </div>
+              </div>
+            </div>
+            <div className=" flex justify-center">
+              <div>
                 <p className=" mx-2 mt-3 mb-1">Control No.</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
@@ -663,6 +703,19 @@ export default function StickyHeadTable() {
                 </div>
               </div>
             </div>
+            <div className=" flex justify-center">
+            <div>
+                <p className=" mx-2 mt-3 mb-1">Purpose</p>
+                <input
+                  defaultValue={dataRequest.purpose}
+                  className=" mx-2 rounded-md py-3 px-10"
+                  {...register("purpose", { required: true })}
+                />
+                <div className=" mx-2 text-yellow-500">
+                  {errors.purpose && <span>This field is required</span>}
+                </div>
+              </div>
+              </div>
 
             <div className=" flex justify-center my-10 mx-2 gap-5">
               <button

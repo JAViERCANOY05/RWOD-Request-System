@@ -68,7 +68,7 @@ const component: display[] = [
     href: "Dashboard",
   },
   {
-    name: "Payment_Information",
+    name: "Payment",
     icon: <GiReceiveMoney style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Payment_Information",
   },

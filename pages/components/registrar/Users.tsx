@@ -128,11 +128,11 @@ export default function StickyHeadTable() {
     notifyError("Under Coding!");
   };
   const handleDeleteUser = async (list: any) => {
-    console.log(list.role);
+    console.log(list);
     if (list.role === "student") {
       try {
         const token = localStorage.getItem("token");
-        const responseData = await DeleteUser.delete(list.id, token);
+        const responseData = await DeleteUser.delete(list._id, token);
         if (responseData.status) {
           notifySuccess("User deleted!");
           GetStudentList();
@@ -254,7 +254,7 @@ export default function StickyHeadTable() {
                         tabIndex={-1}
                         key={index++}
                       >
-                        <TableCell>{list.id}</TableCell>
+                        <TableCell>{list._id}</TableCell>
                         <TableCell>{list.firstName}</TableCell>
                         <TableCell align="right">{list.course}</TableCell>
                         <TableCell align="right">{list.year}</TableCell>
@@ -263,13 +263,13 @@ export default function StickyHeadTable() {
                         <TableCell align="right">
                           <div>
                             {/* <Link href="/components/registrar/Edit_Course"> */}
-                            <button
+                            {/* <button
                               onClick={handleUpdate}
                               type="button"
                               className="focus:outline-none font-bold text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                             >
                               Update
-                            </button>
+                            </button> */}
                             {/* </Link> */}
                             <button
                               onClick={() => handleDeleteUser(list)}
@@ -389,9 +389,22 @@ export default function StickyHeadTable() {
                     className="block font-bold w-72 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   >
                     <option value="">Choose a course</option>
-                    <option value="course1">Course 1</option>
-                    <option value="course2">Course 2</option>
-                    <option value="course3">Course 3</option>
+                    <option value="course1">
+                      College of Teacher Education (CTE)
+                    </option>
+                    <option value="course2">
+                      College of Business and Management (CBM)
+                    </option>
+                    <option value="course3">
+                      Hotel and Business Management
+                    </option>
+                    <option value="course3">College of Science (COS) </option>
+                    <option value="course3">
+                      Environment and Computer science{" "}
+                    </option>
+                    <option value="course3">
+                      College of Fisheries and Marine Sciences (CFMS)
+                    </option>
                   </select>
                 </div>
               </div>

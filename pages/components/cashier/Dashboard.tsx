@@ -1,6 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Status from "./../../api/getAllStatatus"
 
 const Dashboard = () => {
+  const [data , setData] = React.useState({
+    approve: "",
+    pending : "",
+    totalAmount: ""
+  })
+
+  const getStatus = async()=>
+  {
+    try {
+
+      const token = localStorage.getItem("token")
+      const response = await Status.update(token)
+
+    if(response.status)
+    {
+      setData(response.response)
+      console.log(response.response , " kk")
+    }
+    else
+    {
+      console.log( " error")
+
+    }
+    } catch (error) {
+      console.log( " error")
+      
+    }
+    
+  }
+
+  useEffect(()=>
+  {
+    getStatus()
+  },[])
   return (
     <div className=" h-screen mt-10 flex justify-center  ">
       <div className="">
@@ -10,30 +45,21 @@ const Dashboard = () => {
 
         <div className=" flex gap-10 my-10">
           <div className="box-content h-32 w-96  p-4  text-white  border-4 bg-slate-800  rounded-2xl">
-            <p>Payment Received</p>
-            <p className="pt-5">0</p>
-
-            <div className=" flex justify-center mt-5">
-              <button className="btn text-white btn-success">View</button>
-            </div>
+            <p>Payment Amount</p>
+            <p className="pt-5">₱. {data.totalAmount}</p>
           </div>
           <div className="box-content h-32 w-96  text-white  p-4  border-4 bg-slate-800  rounded-2xl">
-            <p>Waiting for Approval</p>
-            <p className="pt-5">0</p>
+            <p>Approve</p>
+            <p className="pt-5">{data.approve}</p>
 
-            <div className=" flex justify-center mt-5">
-              <button className="btn text-white btn-success">View</button>
-            </div>
+           
           </div>
         </div>
         <div className=" flex  my-10 justify-center">
           <div className="box-content h-32 w-96 text-white  p-4  border-4 bg-slate-800  rounded-2xl">
-            <p>Number of Complete Request</p>
-            <p className="pt-5">0</p>
-
-            <div className=" flex justify-center mt-5">
-              <button className="btn text-white btn-success">View</button>
-            </div>
+            <p>Complete Request</p>
+            <p className="pt-5">{data.pending}</p>
+            
           </div>
         </div>
       </div>

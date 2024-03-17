@@ -45,6 +45,8 @@ import { FaCodePullRequest } from "react-icons/fa6";
 import { FaUsers } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
 import Profile from "./Profile";
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import FeedBack from "./FeedBack"
 
 const style = {
   position: "absolute" as "absolute",
@@ -84,16 +86,23 @@ const component: display[] = [
     icon: <FaUsers style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Users",
   },
+  // {
+  //   name: "Reports",
+  //   icon: <TbReportSearch style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+  //   href: "Reports",
+  // },
   {
-    name: "Reports",
-    icon: <TbReportSearch style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Reports",
+    name: "Feed Data",
+    icon: <FeedbackIcon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "FeedBack",
   },
+  
   {
     name: "Profile",
     icon: <CgProfile style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Profile",
   },
+  
 
   // Add more trees as needed
 ];
@@ -204,6 +213,10 @@ export default function MiniDrawer() {
     } else if (item === "Profile") {
       setDisplayComponent(<Profile />);
     }
+    else if (item === "FeedBack") {
+      setDisplayComponent(<FeedBack />);
+    }
+    
   };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
