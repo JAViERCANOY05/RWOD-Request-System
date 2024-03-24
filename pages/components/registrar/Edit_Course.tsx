@@ -162,9 +162,7 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Registrar Web-based Online Document Request System
-          </Typography>
+          <Typography variant="h6" noWrap component="div"></Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

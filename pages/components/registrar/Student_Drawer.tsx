@@ -21,7 +21,7 @@ import Users from "./Users";
 import { useState } from "react";
 import Dashboard from "../student/Dashboard";
 import Logout from "@mui/icons-material/Logout";
-import FeedBack from "../student/FeedBack"
+import FeedBack from "../student/FeedBack";
 import Request_New from "../student/Request_New";
 import List_of_Request from "../student/List_of_Request";
 import Profile from "../student/Profile";
@@ -32,12 +32,12 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { FaListCheck } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
 import { MdWorkHistory } from "react-icons/md";
-import FeedbackIcon from '@mui/icons-material/Feedback';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import NavigationIcon from '@mui/icons-material/Navigation';
+import FeedbackIcon from "@mui/icons-material/Feedback";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import NavigationIcon from "@mui/icons-material/Navigation";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -189,11 +189,9 @@ export default function MiniDrawer() {
       setDisplayComponent(<Users />);
     } else if (item === "Transaction History") {
       setDisplayComponent(<Transaction_History />);
-    }
-    else if (item === "FeedBack") {
+    } else if (item === "FeedBack") {
       setDisplayComponent(<FeedBack />);
     }
-    
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -206,7 +204,7 @@ export default function MiniDrawer() {
 
   return (
     <Box sx={{ display: "flex" }} className="">
-      <CssBaseline/>
+      <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
@@ -223,7 +221,7 @@ export default function MiniDrawer() {
           </IconButton>
           <div className=" flex gap-96">
             <Typography variant="h6" noWrap component="div">
-              Registrar Web-based Online Document Request System
+              Registrar Web-based Document Request System
             </Typography>
           </div>
         </Toolbar>
@@ -400,7 +398,6 @@ export default function MiniDrawer() {
           </div>
         </Box>
       </Modal>
- 
     </Box>
   );
 }

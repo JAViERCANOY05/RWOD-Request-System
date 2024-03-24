@@ -5,6 +5,8 @@ const Dashboard = () => {
   const [data, setData] = React.useState({
     approve: "",
     pending: "",
+    waitingForApproval: "",
+    waitingForPayment: "",
     totalAmount: "",
   });
 
@@ -45,17 +47,30 @@ const Dashboard = () => {
           </p>
         </div>
         <div className=" flex gap-10">
+          <div className="box-content h-32 w-96  text-white  p-4  border-4 bg-red-500  rounded-2xl">
+            <p>Pending Request</p>
+            <p className="pt-5">{data.pending}</p>
+          </div>
           <div
             className="box-content h-32 w-96 text-white  p-4  border-4 bg-green-500
-          
           rounded-2xl"
           >
             <p>Approve Request</p>
             <p className="pt-5">{data.approve}</p>
           </div>
+        </div>
+        <div className=" flex gap-10">
+          <div
+            className="box-content h-32 w-96 text-white  p-4  border-4 bg-yellow-500
+          
+          rounded-2xl"
+          >
+            <p>Waiting for Approval</p>
+            <p className="pt-5">{data.approve}</p>
+          </div>
           <div className="box-content h-32 w-96  text-white  p-4  border-4 bg-blue-500  rounded-2xl">
-            <p>Pending Request</p>
-            <p className="pt-5">{data.pending}</p>
+            <p>Waiting for Payment</p>
+            <p className="pt-5">{data.waitingForPayment}</p>
           </div>
         </div>
       </div>

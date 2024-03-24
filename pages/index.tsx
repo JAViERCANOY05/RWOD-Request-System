@@ -78,7 +78,7 @@ export default function Example() {
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-blue-500 flex flex-col justify-center sm:py-12">
         <div className=" flex justify-center mb-20 ">
           <div className=" text-2xl text-white font-bold border-b-2 py-5">
-            Registrar Web-based Online Document Request System
+            Registrar Web-based Document Request System
           </div>
         </div>
         <div className="relative py-3 sm:max-w-xl sm:mx-auto">

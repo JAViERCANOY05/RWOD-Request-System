@@ -45,8 +45,8 @@ import { FaCodePullRequest } from "react-icons/fa6";
 import { FaUsers } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
 import Profile from "./Profile";
-import FeedbackIcon from '@mui/icons-material/Feedback';
-import FeedBack from "./FeedBack"
+import FeedbackIcon from "@mui/icons-material/Feedback";
+import FeedBack from "./FeedBack";
 
 const style = {
   position: "absolute" as "absolute",
@@ -96,13 +96,12 @@ const component: display[] = [
     icon: <FeedbackIcon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "FeedBack",
   },
-  
+
   {
     name: "Profile",
     icon: <CgProfile style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Profile",
   },
-  
 
   // Add more trees as needed
 ];
@@ -212,11 +211,9 @@ export default function MiniDrawer() {
       setDisplayComponent(<Reports />);
     } else if (item === "Profile") {
       setDisplayComponent(<Profile />);
-    }
-    else if (item === "FeedBack") {
+    } else if (item === "FeedBack") {
       setDisplayComponent(<FeedBack />);
     }
-    
   };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -241,7 +238,7 @@ export default function MiniDrawer() {
           </IconButton>
           <div className=" flex gap-96">
             <Typography variant="h6" noWrap component="div">
-              Registrar Web-based Online Document Request System
+              Registrar Web-based Document Request System
             </Typography>
           </div>
         </Toolbar>
