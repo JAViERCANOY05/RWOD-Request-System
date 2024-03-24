@@ -11,21 +11,26 @@ import GetAllRequest from "@/pages/api/getAllRequest";
 import Box from "@mui/material/Box";
 import { useEffect } from "react";
 import DeleteRequest from "@/pages/api/deleteRequest";
-import { notifyError, notifySuccess } from "@/pages/Notifications";
+import {
+  notifyError,
+  notifySuccess,
+  notifySuccess2,
+} from "@/pages/Notifications";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from "@mui/material/CircularProgress";
-import Request from "../../api/approveRequest"
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import Request from "../../api/approveRequest";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import VIewTable from "../helper/viewTable";
 
 const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
   borderRadius: 8,
@@ -39,6 +44,8 @@ interface Column {
     | "No of Copy"
     | "Date Request"
     | "Action"
+    | "Amount"
+    | "Reciept"
     | "Status";
   label: string;
   minWidth?: number;
@@ -74,6 +81,18 @@ const columns: readonly Column[] = [
   {
     id: "Status",
     label: "Status",
+    minWidth: 170,
+    align: "right",
+  },
+  {
+    id: "Amount",
+    label: "Amount",
+    minWidth: 170,
+    align: "right",
+  },
+  {
+    id: "Reciept",
+    label: "Reciept",
     minWidth: 170,
     align: "right",
   },
@@ -142,11 +161,11 @@ function createData(
 export default function StickyHeadTable() {
   const [dataRequest, setDataRequest] = React.useState({
     _id: "",
-    name : "",
-    address : "",
-    year : "",
-    course : "",
-amount : 0,
+    name: "",
+    address: "",
+    year: "",
+    course: "",
+    amount: 0,
     // _id: "",
     // controlNumber: "",
     // studentId: "",
@@ -155,24 +174,22 @@ amount : 0,
     // noOfCopies: "",
     // emailAddress: "",
     // purpose: "",
-      ownerId: 0,
-      controlNumber:0,
-      studentId: 0,
-      purpose: 123,
-      emailAddress: "",
-      isOwner: "",
-      status: "",
-      paymentMethod: "",
-      noOfCopies: 0,
+    ownerId: 0,
+    controlNumber: 0,
+    studentId: 0,
+    purpose: 123,
+    emailAddress: "",
+    isOwner: "",
+    status: "",
+    paymentMethod: "",
+    noOfCopies: 0,
   });
   const [open, setOpen] = React.useState(false);
-  const handleOpen = (data : any ) => 
-  {
-    setDataRequest(data)
+  const handleOpen = (data: any) => {
+    setDataRequest(data);
     // console.log(data)
     setOpen(true);
-
-  }
+  };
   const handleClose = () => setOpen(false);
 
   const [page, setPage] = React.useState(0);
@@ -235,10 +252,10 @@ amount : 0,
   //     {
   //       console.log("error")
   //     }
-      
+
   //   } catch (error) {
   //     console.log("error")
-      
+
   //   }
 
   // }
@@ -246,45 +263,53 @@ amount : 0,
     getListOfRequest();
   }, []);
 
-  const handleUpdate = () => {
-    notifyError("Under Coding!");
+  const handleUpdate = async (id: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await Request.approvePayment(token, id);
+      if (response.status) {
+        setInputValue1("");
+        setInputValue("");
+        setOpen(false);
+        getListOfRequest();
+        notifySuccess2("Payment Approved ! ");
+        console.log("goods na ");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error");
+    }
   };
 
-  const [inputValue, setInputValue] = React.useState('');
-  const [inputValue1, setInputValue1] = React.useState('');
+  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue1, setInputValue1] = React.useState("");
 
-
-  
-  const handleSubmit =  async (event : any ) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const data = {
-      amount : inputValue ,
-      name : inputValue1
-    }
-  console.log("bad " ,data  )
+      amount: inputValue,
+      name: inputValue1,
+    };
+    console.log("bad ", data);
 
-  try {
-    const token = localStorage.getItem("token")
-    const response = await Request.approved(token , dataRequest._id,data)
-    if(response.status)
-    {
-      setInputValue1("")
-      setInputValue("")
-      setOpen(false);
-       getListOfRequest();
-      notifySuccess("Request Approved ! ");
-      console.log("goods na ")
+    try {
+      const token = localStorage.getItem("token");
+      const response = await Request.approved(token, dataRequest._id, data);
+      if (response.status) {
+        setInputValue1("");
+        setInputValue("");
+        setOpen(false);
+        getListOfRequest();
+        notifySuccess("Request Approved ! ");
+        console.log("goods na ");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error");
     }
-    else
-    {
-      console.log("error")
-    }
-    
-  } catch (error) {
-    console.log("error")
-    
-  }
-  }
+  };
 
   return (
     <div>
@@ -345,60 +370,73 @@ amount : 0,
                           <TableCell align="right">{list.isOwner}</TableCell>
                           <TableCell align="right">{list.noOfCopies}</TableCell>
                           <TableCell align="right">
-
-                            {new Date(list.createdAt).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "2-digit",
-                    })}
+                            {new Date(list.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "2-digit",
+                              }
+                            )}
                           </TableCell>
                           {/* <TableCell align="right">{list.status}</TableCell> */}
                           <TableCell align="right">
                             <p
                               className={
                                 list.status === "approve"
-                                  ? "complete bg-green-500  text-center text-white rounded-lg"
-                                  : "pending bg-blue-700 text-center text-white rounded-lg"
+                                  ? "complete bg-green-500 text-center text-white rounded-lg"
+                                  : list.status === "waiting for approval" // Adjusted condition for waiting for approval
+                                  ? "pending bg-blue-700 text-center text-white rounded-lg" // Blue for waiting for approval
+                                  : list.status === "waiting for payment"
+                                  ? "pending bg-blue-700 text-center text-white rounded-lg" // Blue for waiting for payment
+                                  : list.status === "pending"
+                                  ? "pending bg-yellow-500 text-center text-white rounded-lg"
+                                  : "" // Add default class or empty string if none of the conditions match
                               }
                             >
                               {list.status}
                             </p>
                           </TableCell>
                           <TableCell align="right">
-  <div>
-    {list.status === "approve" ? (
-      <>
-       
-        <button
-          onClick={() => handleDeleteUser(list._id)}
-          type="button"
-          className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-        >
-          Delete
-        </button>
-      </>
-    ) : (
-      <>
-       <button
-          onClick={() => handleOpen(list)}
-          type="button"
-          className="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900"
-        >
-          Payment
-        </button>
-        <button
-        onClick={handleUpdate}
-        type="button"
-        className="focus:outline-none font-bold text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-      >
-        Update
-      </button>
-      </>
-      
-    )}
-  </div>
-</TableCell>
+                            {!list.amount
+                              ? null
+                              : new Intl.NumberFormat("en-US").format(
+                                  parseFloat(list.amount)
+                                )}
+                          </TableCell>
+                          <TableCell align="right">
+                            {!list.image ? null : (
+                              <VIewTable imageUrl={list.image} />
+                            )}
+                          </TableCell>
 
+                          <TableCell align="right">
+                            <div>
+                              {list.status === "approve" ||
+                              list.status === "waiting for approval" ||
+                              list.status === "pending" ? (
+                                <>
+                                  <button
+                                    onClick={() => handleDeleteUser(list._id)}
+                                    type="button"
+                                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                  >
+                                    Delete
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={() => handleUpdate(list._id)}
+                                    type="button"
+                                    className="focus:outline-none font-bold text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                                  >
+                                    Approve Payment
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </TableCell>
                         </TableRow>
                       ))
                   )}
@@ -418,61 +456,67 @@ amount : 0,
           {/* </Paper> */}
         </Box>
       </div>
-<div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <p  className=" text-center font-bold my-5 border-">
-            Payment Info
-          </p>
-          <div>
-          <div className="flex justify-center items-center ">
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="inputValue">
-            Name
-          </label>
-          <input
-            id="inputValue1"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="Name"
-            value={inputValue1}
-            onChange={(event) => setInputValue1(event.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="inputValue">
-            Amount
-          </label>
-          <input
-            id="inputValue"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="number"
-            placeholder="Enter value"
-            value={inputValue}
-            onChange={(event) => setInputValue(event.target.value)}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
-          </div>
-        </Box>
-      </Modal>
-    </div>
-
+      <div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <p className=" text-center font-bold my-5 border-">Payment Info</p>
+            <div>
+              <div className="flex justify-center items-center ">
+                <form
+                  onSubmit={handleSubmit}
+                  className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+                >
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor="inputValue"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="inputValue1"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      type="text"
+                      placeholder="Name"
+                      value={inputValue1}
+                      onChange={(event) => setInputValue1(event.target.value)}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor="inputValue"
+                    >
+                      Amount
+                    </label>
+                    <input
+                      id="inputValue"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      type="number"
+                      placeholder="Enter value"
+                      value={inputValue}
+                      onChange={(event) => setInputValue(event.target.value)}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      type="submit"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+      </div>
 
       <ToastContainer />
     </div>

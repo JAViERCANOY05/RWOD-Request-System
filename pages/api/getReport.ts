@@ -1,15 +1,14 @@
-const RequestForm = {
-  request: async (data: any, token: any) => {
+const Status = {
+  update: async (token: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/addRequest`,
+        `${process.env.NEXT_PUBLIC_API_URL}/getDocumentReport`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json", // Add Content-Type header
           },
-          body: JSON.stringify(data), // Convert data to JSON string
         }
       );
       if (response.ok) {
@@ -20,11 +19,11 @@ const RequestForm = {
         };
         return sendTo;
       }
-      throw new Error("Something went wrong !");
+      throw new Error(" Something went wrong ! ");
     } catch (error) {
       throw error;
     }
   },
 };
 
-export default RequestForm;
+export default Status;

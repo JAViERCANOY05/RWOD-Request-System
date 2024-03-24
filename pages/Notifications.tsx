@@ -12,7 +12,21 @@ export function notifySuccess(meesage: string) {
     theme: "colored",
   });
 }
-
+export function notifySuccess2(message: string) {
+  toast.success(message, {
+    position: "bottom-right",
+    autoClose: 1200,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    style: {
+      backgroundColor: "blue", // Set background color to blue
+      color: "white", // Set text color to white
+    },
+  });
+}
 export function notifyWarning(meesage: string) {
   toast.warn(`${meesage} `, {
     position: "bottom-right",

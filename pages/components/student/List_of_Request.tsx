@@ -19,23 +19,25 @@ import { eventNames } from "process";
 import RequestForm from "@/pages/api/request_form";
 import DeleteRequest from "@/pages/api/deleteRequest";
 import UpdateRequest from "@/pages/api/updaRequest";
+import ModalButton from "../helper/viewClaim";
+import { list } from "postcss";
 
 type Inputs = {
-  controlNumber: string;
-  studentId: string;
-  emailAddress: string;
-  isOwner: string;
-  documentationType: string;
-  noOfCopies: string;
-  dateRequest: string;
-  name: string;
-  purpose: string;
-  year: string;
-  course: string;
-  address: string;
-
-  // relationshipToOwnwer: string;
+  controlNumber: any;
+  studentId: any;
+  emailAddress: any;
+  isOwner: any;
+  documentationType: any;
+  noOfCopies: any;
+  dateRequest: any;
+  name: any;
+  purpose: any;
+  year: any;
+  course: any;
+  address: any;
+  img?: any;
 };
+
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -62,6 +64,7 @@ interface Column {
     | "No of Copy"
     | "Date Request"
     | "Status"
+    | "Amount"
     | "Action";
 
   label: string;
@@ -76,7 +79,7 @@ const columns: readonly Column[] = [
   { id: "Year", label: "Year", minWidth: 100 },
   { id: "Course", label: "Course", minWidth: 100 },
   { id: "User ID No", label: "User ID No", minWidth: 100 },
- 
+
   {
     id: "Are you the Owner",
     label: "Are you the Owner",
@@ -96,10 +99,16 @@ const columns: readonly Column[] = [
     minWidth: 170,
     align: "right",
   },
-  
+
   {
     id: "Date Request",
     label: "Date Request",
+    minWidth: 170,
+    align: "right",
+  },
+  {
+    id: "Amount",
+    label: "Amount",
     minWidth: 170,
     align: "right",
   },
@@ -118,16 +127,14 @@ const columns: readonly Column[] = [
   // documentationType
 ];
 
-
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [listRequest, setListRequest] = React.useState([]);
   const [dataRequest, setDataRequest] = React.useState({
-    name : "",
-    year : "",
-    course : "",
-    address :"",
-
+    name: "",
+    year: "",
+    course: "",
+    address: "",
     _id: "",
     controlNumber: "",
     studentId: "",
@@ -136,14 +143,17 @@ export default function StickyHeadTable() {
     noOfCopies: "",
     emailAddress: "",
     purpose: "",
+    status: "",
   });
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   const {
     reset,
     register,
     handleSubmit,
     watch,
+
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -181,24 +191,25 @@ export default function StickyHeadTable() {
   const onSubmit: SubmitHandler<Inputs> = async (data: any, event: any) => {
     event.preventDefault();
     const dataRequest = {
-      controlNumber: data.controlNumber,
       studentId: data.studentId,
       emailAddress: data.emailAddress,
       isOwner: data.isOwner,
       documentationType: data.documentationType,
       noOfCopies: data.noOfCopies,
       purpose: data.purpose,
-      name : data.name,
-      year : data.year ,
-      course : data.course,
-      address : data.address
+      name: data.name,
+      year: data.year,
+      course: data.course,
+      address: data.address,
+      status: data.status,
     };
-    console.log(dataRequest, "data Submited !");
+
     try {
       const token = localStorage.getItem("token");
       const data = await RequestForm.request(dataRequest, token);
       if (data.status) {
         notifySuccess("Add succesfully");
+
         getListOfRequest();
         reset();
         setOpen(false);
@@ -214,26 +225,49 @@ export default function StickyHeadTable() {
     data: any,
     event: any
   ) => {
+    event.preventDefault();
+
+    // Check if data is undefined
+    if (!data) {
+      console.log("Data is undefined");
+      return;
+    }
+
     console.log("data is here ", data);
     const id = dataRequest._id;
-    event.preventDefault();
+
+    const update = {
+      studentId: data.studentId,
+      emailAddress: data.emailAddress,
+      isOwner: data.isOwner,
+      documentationType: data.documentationType,
+      noOfCopies: data.noOfCopies,
+      purpose: data.purpose,
+      name: data.name,
+      year: data.year,
+      course: data.course,
+      address: data.address,
+      controlNumber: data.controlNumber,
+      image: data.img,
+    };
 
     try {
       const token = localStorage.getItem("token");
-      const response = await UpdateRequest.update(token, data, id);
-      if (response.status) {
-        reset();
-        notifySuccess("Successfully Updated");
-        console.log("updated!");
+      const responseData = await UpdateRequest.update(token, update, id);
+      if (responseData && responseData.status) {
+        notifySuccess("Update successfully");
+
         getListOfRequest();
+        reset();
         setOpenUpdate(false);
+        console.log("asdad");
       } else {
-        notifyError("Something went wrong !");
-        console.log("Something Went wrong !");
+        notifyError("Something went wrong!");
+        console.log("error");
       }
     } catch (error) {
-      console.log("Something Went wrong !");
-      notifyError("Something went wrong !");
+      console.log("Something went wrong!");
+      notifyError("Something went wrong!");
     }
   };
 
@@ -266,6 +300,7 @@ export default function StickyHeadTable() {
       console.log(response);
     } catch (error) {}
   };
+
   useEffect(() => {
     getListOfRequest();
   }, []);
@@ -340,7 +375,6 @@ export default function StickyHeadTable() {
                               <TableCell>{list.name}</TableCell>
                               <TableCell>{list.year}</TableCell>
                               <TableCell>{list.course}</TableCell>
-
                               <TableCell>{list.studentId}</TableCell>
                               <TableCell align="right">
                                 {list.isOwner}
@@ -351,18 +385,38 @@ export default function StickyHeadTable() {
                               <TableCell align="right">
                                 {list.noOfCopies}
                               </TableCell>
-
                               <TableCell align="right">
                                 {new Date(list.createdAt).toLocaleString()}
                               </TableCell>
-                              <TableCell align="right">
-                                <span className=" bg-green-500 px-3 py-1 rounded-md text-white">
-                                  {list.status}
-                                </span>
-                              </TableCell>
 
                               <TableCell align="right">
-                                <div className=" flex gap-2 justify-end">
+                                {list && list.amount
+                                  ? new Intl.NumberFormat("en-US").format(
+                                      parseFloat(list.amount)
+                                    )
+                                  : null}
+                              </TableCell>
+                              {/* /////////////////////////////////////////////////////////////////////////// */}
+                              <TableCell align="center">
+                                <p
+                                  className={
+                                    "px-1 py-2 rounded-lg text-white font-semibold   " +
+                                    (list.status === "approve"
+                                      ? "bg-green-500"
+                                      : list.status === "waiting for payment"
+                                      ? "bg-blue-500"
+                                      : list.status === "waiting for approval"
+                                      ? "bg-yellow-500"
+                                      : list.status === "pending"
+                                      ? "bg-pink-500"
+                                      : "")
+                                  }
+                                >
+                                  {list.status}
+                                </p>
+                              </TableCell>
+                              <TableCell align="right">
+                                {list.status != "approve" ? (
                                   <button
                                     onClick={() => handleUpdate(list)}
                                     type="button"
@@ -370,15 +424,15 @@ export default function StickyHeadTable() {
                                   >
                                     Update
                                   </button>
+                                ) : null}
 
-                                  <button
-                                    onClick={() => handleDelete(list._id)}
-                                    type="button"
-                                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
+                                <button
+                                  onClick={() => handleDelete(list._id)}
+                                  type="button"
+                                  className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                >
+                                  Delete
+                                </button>
                               </TableCell>
                             </TableRow>
                           );
@@ -461,16 +515,16 @@ export default function StickyHeadTable() {
                 </div>
               </div>
             </div>
-          
+
             <div className=" flex justify-center">
-              <div>
-                <p className=" mx-2 mt-3 mb-1">Control No.</p>
+              <div className="">
+                <p className=" mx-2 mt-3 mb-1">Purpose</p>
                 <input
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("controlNumber", { required: true })}
+                  {...register("purpose", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.controlNumber && <span>This field is required</span>}
+                  {errors.purpose && <span>This field is required</span>}
                 </div>
               </div>
               <div>
@@ -532,16 +586,29 @@ export default function StickyHeadTable() {
 
               {/* purpose : string */}
             </div>
-            <div className=" flex justify-center">
-              <div className="">
-                <p className=" mx-2 mt-3 mb-1">Purpose</p>
-                <input
-                  className=" mx-2 rounded-md py-3 px-10"
-                  {...register("purpose", { required: true })}
-                />
-                <div className=" mx-2 text-yellow-500">
-                  {errors.purpose && <span>This field is required</span>}
-                </div>
+
+            {/* <div className="flex justify-center items-center">
+              <p className="mx-2 mt-3 mb-1">Receipt</p>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("img")}
+                className="mx-2 rounded-md py-3 px-10"
+              />
+              <div className="mx-2 text-yellow-500">
+                {errors.img && <span>This field is required</span>}
+              </div>
+            </div> */}
+            {/* Naka hiddden na kay yawa fi mogana ug di completo  */}
+            <div className=" hidden">
+              <p className=" mx-2 mt-3 mb-1">No. Copies</p>
+              <input
+                className=" mx-2 rounded-md py-3 px-10"
+                defaultValue={"1"}
+                {...register("controlNumber")}
+              />
+              <div className=" mx-2 text-yellow-500">
+                {errors.noOfCopies && <span>This field is required</span>}
               </div>
             </div>
 
@@ -553,6 +620,7 @@ export default function StickyHeadTable() {
               >
                 Back
               </button>
+
               {/* </Link> */}
               <button className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white">
                 Continue
@@ -597,7 +665,6 @@ export default function StickyHeadTable() {
                   className=" mx-2 rounded-md py-3 px-10"
                   {...register("year", { required: true })}
                   defaultValue={dataRequest.year}
-
                 />
                 <div className=" mx-2 text-yellow-500">
                   {errors.year && <span>This field is required</span>}
@@ -611,7 +678,6 @@ export default function StickyHeadTable() {
                   className=" mx-2 rounded-md py-3 px-10"
                   {...register("course", { required: true })}
                   defaultValue={dataRequest.course}
-
                 />
                 <div className=" mx-2 text-yellow-500">
                   {errors.course && <span>This field is required</span>}
@@ -631,14 +697,14 @@ export default function StickyHeadTable() {
             </div>
             <div className=" flex justify-center">
               <div>
-                <p className=" mx-2 mt-3 mb-1">Control No.</p>
+                <p className=" mx-2 mt-3 mb-1">Purpose</p>
                 <input
+                  defaultValue={dataRequest.purpose}
                   className=" mx-2 rounded-md py-3 px-10"
-                  {...register("controlNumber", { required: true })}
-                  defaultValue={dataRequest.controlNumber}
+                  {...register("purpose", { required: true })}
                 />
                 <div className=" mx-2 text-yellow-500">
-                  {errors.controlNumber && <span>This field is required</span>}
+                  {errors.purpose && <span>This field is required</span>}
                 </div>
               </div>
               <div>
@@ -677,20 +743,37 @@ export default function StickyHeadTable() {
                 </div>
               </div>
             </div>
-            <div className=" flex justify-center">
-              <div>
-                <p className=" mx-2 mt-3 mb-1">Document Name</p>
-                <input
-                  defaultValue={dataRequest.documentationType}
-                  className=" mx-2 rounded-md py-3 px-10"
-                  {...register("documentationType", { required: true })}
-                />
-                <div className=" mx-2 text-yellow-500">
-                  {errors.documentationType && (
-                    <span>This field is required</span>
-                  )}
+            <div className=" flex justify-center mb-4">
+              {dataRequest.status == "waiting for payment" ? (
+                <div>
+                  <p className="mx-2 mt-3 mb-1">Document Name</p>
+                  <input
+                    defaultValue={dataRequest.documentationType} // Use value instead of defaultValue
+                    readOnly // Add readOn
+                    className="mx-2 rounded-md py-3 px-10 bg-slate-400 border"
+                    {...register("documentationType", { required: true })} // Add styling for read-only appearance
+                  />
+                  <div className="mx-2 text-yellow-500">
+                    {errors.documentationType && (
+                      <span>This field is required</span>
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div>
+                  <p className="mx-2 mt-3 mb-1">Document Name</p>
+                  <input
+                    defaultValue={dataRequest.documentationType} // Use value instead of defaultValue
+                    className="mx-2 rounded-md py-3 px-10 bg-gray-100"
+                    {...register("documentationType", { required: true })} // Add styling for read-only appearance
+                  />
+                  <div className="mx-2 text-yellow-500">
+                    {errors.documentationType && (
+                      <span>This field is required</span>
+                    )}
+                  </div>
+                </div>
+              )}
               <div>
                 <p className=" mx-2 mt-3 mb-1">No. Copies</p>
                 <input
@@ -703,19 +786,32 @@ export default function StickyHeadTable() {
                 </div>
               </div>
             </div>
-            <div className=" flex justify-center">
-            <div>
-                <p className=" mx-2 mt-3 mb-1">Purpose</p>
+            {dataRequest.status != "pending" ? (
+              <div className="flex justify-center items-center">
+                <p className="mx-2 mt-3 mb-1">Receipt</p>
                 <input
-                  defaultValue={dataRequest.purpose}
-                  className=" mx-2 rounded-md py-3 px-10"
-                  {...register("purpose", { required: true })}
+                  type="file"
+                  accept="image/*"
+                  {...register("img")}
+                  className="mx-2 rounded-md py-3 px-10"
                 />
-                <div className=" mx-2 text-yellow-500">
-                  {errors.purpose && <span>This field is required</span>}
+                <div className="mx-2 text-yellow-500">
+                  {errors.img && <span>This field is required</span>}
                 </div>
               </div>
+            ) : null}
+            {/* Naka hiddden na kay yawa fi mogana ug di completo  */}
+            <div className=" hidden">
+              <p className=" mx-2 mt-3 mb-1">No. Copies</p>
+              <input
+                className=" mx-2 rounded-md py-3 px-10"
+                defaultValue={"0"}
+                {...register("controlNumber")}
+              />
+              <div className=" mx-2 text-yellow-500">
+                {errors.noOfCopies && <span>This field is required</span>}
               </div>
+            </div>
 
             <div className=" flex justify-center my-10 mx-2 gap-5">
               <button
