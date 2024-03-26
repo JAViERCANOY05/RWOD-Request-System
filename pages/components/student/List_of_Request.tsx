@@ -21,6 +21,7 @@ import DeleteRequest from "@/pages/api/deleteRequest";
 import UpdateRequest from "@/pages/api/updaRequest";
 import ModalButton from "../helper/viewClaim";
 import { list } from "postcss";
+import DOC from "../helper/modal";
 
 type Inputs = {
   controlNumber: any;
@@ -126,6 +127,7 @@ const columns: readonly Column[] = [
   },
   // documentationType
 ];
+////////////////////////////////////////////////////////////////////
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
@@ -787,16 +789,26 @@ export default function StickyHeadTable() {
               </div>
             </div>
             {dataRequest.status != "pending" ? (
-              <div className="flex justify-center items-center">
-                <p className="mx-2 mt-3 mb-1">Receipt</p>
-                <input
-                  type="file"
-                  accept="image/*"
-                  {...register("img")}
-                  className="mx-2 rounded-md py-3 px-10"
-                />
-                <div className="mx-2 text-yellow-500">
-                  {errors.img && <span>This field is required</span>}
+              <div className="flex  items-center justify-center flex-col py-2">
+                <div className=" flex justify-end gap-2">
+                  {" "}
+                  <p className=" text-xl">BISU DPB Account: </p>
+                  <p className=" font-bold text-xl">123456789</p>
+                  <p className=" text-xl text-red-700 ml-2">
+                    (Reminder there is 15P fee)
+                  </p>
+                </div>
+                <div className=" flex items-center justify-center">
+                  <p className="mx-2 mt-3 mb-1">Receipt</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    {...register("img")}
+                    className="mx-2 rounded-md py-3 px-10"
+                  />
+                  <div className="mx-2 text-yellow-500">
+                    {errors.img && <span>This field is required</span>}
+                  </div>
                 </div>
               </div>
             ) : null}
